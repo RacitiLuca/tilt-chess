@@ -1,0 +1,7 @@
+.venv/
+data/
+output/
+*.zst
+*.parquet
+__pycache__/
+campione_partite.*
