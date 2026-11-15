@@ -1,0 +1,6 @@
+zstandard
+pyarrow
+duckdb
+pandas
+chess
+matplotlib
