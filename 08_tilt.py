@@ -16,7 +16,7 @@ Stimatore B (dentro il blocco, primario)
   Confronta tra loro le partite dello stesso blocco (stessa sessione, stessa
   classe): giornata storta ed errore del rating sono uguali per tutte e spariscono.
   E' una regressione con un effetto fisso per blocco del residuo y di una partita
-  sul residuo della partita precedente (il suo risultato INATTESO). Tre trappole:
+  sul residuo della partita precedente (il suo risultato INATTESO). Quattro trappole:
 
   1. Sequenze corte (Miller e Sanjurjo 2018; "distorsione di Nickell"). Dentro un
      blocco corto il confronto e' distorto anche se l'ordine delle partite non
@@ -37,14 +37,41 @@ Stimatore B (dentro il blocco, primario)
      scambiabile. Per questo B usa il residuo della partita precedente e non il
      suo esito. La versione pre-registrata resta in tabella, solo per confronto.
 
-  3. Chi smette. La decisione di chiudere la sessione dipende dall'ultimo esito:
-     l'ultima partita del blocco non e' una partita qualsiasi. Nei rimescolamenti
-     resta ferma all'ultimo posto. La colonna "rim_libero" mostra la stima con
-     tutte le partite rimescolate: se differisce, la regola di interruzione conta.
+  3. Chi smette e chi chiede la rivincita (precisazione P11). Smettere e chiedere
+     la rivincita dipendono dal risultato appena ottenuto: l'ultima partita del
+     blocco, o una partita seguita da una rivincita, non e' una partita qualsiasi.
+     Inoltre le rivincite non fanno da esito e arrivano a serie: quali partite
+     entrano nel confronto e' una STRUTTURA del blocco, che non va rimescolata.
+     Nei rimescolamenti la struttura resta ferma (chi e' una rivincita, chi fa da
+     esito, qual e' l'ultima partita) e si scambiano solo i risultati, e solo tra
+     partite dello stesso tipo di selezione (vedi DatiBlocchi.tipo). La colonna
+     "rim_libero" scambia i risultati tra tutte le partite del blocco: se
+     differisce, le regole di selezione contano.
+     Collaudo: con serie di rivincite e nessun tilt, rimescolando le partite
+     insieme ai loro attributi (versione precedente) lo stimatore dava in media
+     +1,3 pp, con p = 0,005; con la struttura ferma torna a zero.
 
-  Collaudo su dati simulati (tests/simula_dati.py): tilt 0 -> tau_B = -0,01 pp
-  (IC95 da -0,66 a 0,68); tilt di 30 Elo (circa -4,0 pp) -> tau_B = -3,86 pp
-  (IC95 da -4,55 a -3,17).
+  4. Distanza +2 e +3 (scoperta sui dati simulati, precisazione P10). Tolta la
+     media del blocco, i prodotti tra tutte le coppie di partite di un blocco hanno
+     somma fissa. Se le coppie a distanza 1 si somigliano piu' della media (tilt
+     vero a +1), le altre coppie devono per forza somigliarsi MENO della media. La
+     regressione separata a distanza +2 trova allora un falso "rimbalzo": +0,9 pp
+     in media simulando un tilt di -3,9 pp solo a +1. Il rimescolamento non lo
+     corregge, perche' il suo termine di paragone sono tutte le coppie del blocco,
+     comprese quelle a distanza 1.
+     Per questo la curva per distanza (e il test H1b) usa una STIMA CONGIUNTA
+     (vedi DatiBlocchi.somme_congiunte): le tre distanze sono stimate insieme, e il
+     termine di paragone sono le partite LONTANE (almeno 4 posti prima dell'esito)
+     dello stesso blocco, che non contengono nessuna delle distanze stimate.
+     La regressione a distanza +1 con rimescolamenti resta lo stimatore primario
+     di H1a: e' corretta se l'effetto dura una sola partita; se dura di piu' e'
+     schiacciata verso zero (prudente). Le regressioni separate a +2 e +3 restano
+     in una tabella a parte, solo per confronto.
+
+  Collaudo su dati simulati (tests/simula_dati.py), medie su 7 semi: tilt 0 ->
+  tau_B = 0,14 pp (errore standard della media 0,17); tilt di 30 Elo (circa
+  -3,9 pp) -> tau_B = -3,71 pp (0,09). Stima congiunta e scenari con rivincite:
+  PRECISAZIONI.md, P10 e P11.
 
 Intervalli al 95%: bootstrap a grappolo sui giocatori (si ricampionano i giocatori
 interi, non le partite: le partite di uno stesso giocatore non sono indipendenti).
@@ -76,6 +103,7 @@ SQL_FASCIA_RATING = """CASE WHEN rating_rif < 1400 THEN 0 WHEN rating_rif < 1600
 SQL_CLASSE_ID = "CASE classe " + " ".join(f"WHEN '{c}' THEN {i}" for i, c in enumerate(CLASSI)) + " END"
 FASCE_PAUSA = ["fino a 15 s", "15-60 s", "1-5 min", "5 min - soglia", "soglia - 6 h", "oltre 6 h"]
 N_CELLE_B = 1 + len(CLASSI) + len(FASCE_RATING)      # tutte, 3 classi, 5 fasce di rating
+N_DISTANZE = 3                                       # stima congiunta: distanze +1, +2, +3
 NOMI_CELLE_B = ["tutte"] + [f"classe {c}" for c in CLASSI] + [f"rating {f}" for f in FASCE_RATING]
 
 
@@ -123,9 +151,9 @@ class DatiBlocchi:
     """Partite dei blocchi con almeno 2 partite, ordinate per (giocatore, blocco, posizione).
 
     Due tipi di vettori:
-      - "di posizione" (blk, primo): descrivono la struttura e NON si rimescolano;
-      - "di partita" (punt, y, esito_ok, prec_ok): viaggiano con la partita
-        quando l'ordine dentro il blocco viene rimescolato.
+      - di STRUTTURA (blk, pos, ultimo, tipo, esito_ok, prec_ok): dicono quali partite
+        sono rivincite, quali fanno da esito, qual e' l'ultima. NON si rimescolano;
+      - di RISULTATO (punt, y): sono cio' che si scambia nei rimescolamenti.
     """
 
     def __init__(self, con, analisi, gruppo, opz):
@@ -151,6 +179,7 @@ class DatiBlocchi:
         manca = np.isnan(y)
         self.y = np.where(manca, 0.0, y)
         rivincita = np.asarray(d["rivincita"]).astype(bool)
+        self.ultimo = np.r_[self.primo[1:], True]                # ultima partita di ogni blocco
         corta = np.asarray(d["corta"]).astype(bool)
         scelto = np.asarray(d["lato_scelto"]).astype(bool)
         # Una partita puo' fare da ESITO se e' il lato scelto (una riga per partita)...
@@ -164,7 +193,26 @@ class DatiBlocchi:
         # forte del suo rating. E' un attributo della partita, fissato sull'ordine vero.
         if not opz.rivincite:
             self.esito_ok &= ~rivincita
-        self.ultimo = np.r_[self.primo[1:], True]                # ultima partita di ogni blocco
+        # TIPO DI SELEZIONE di ogni partita (P11): che cosa le e' successo intorno.
+        #   seguito: 0 = dopo, una partita contro un altro avversario;
+        #            1 = dopo, una rivincita (che non fa da esito);
+        #            2 = e' l'ultima del blocco (dopo si e' smesso, o il blocco si e' interrotto);
+        #   + 3 se la partita stessa e' una rivincita.
+        # Smettere e chiedere la rivincita dipendono dal risultato appena ottenuto, e in
+        # una rivincita si ritrova lo stesso avversario: i tipi hanno medie diverse
+        # anche senza tilt, e si confrontano solo tra loro.
+        # Con --rivincite le rivincite sono partite come le altre: conta solo "ultima".
+        self.tipo = np.where(self.ultimo, 2, 0)
+        if not opz.rivincite:
+            seguita_da_rivincita = np.zeros(self.n, dtype=bool)
+            seguita_da_rivincita[:-1] = rivincita[1:]        # la prima di un blocco non e' mai rivincita
+            self.tipo = np.where(self.ultimo, 2, seguita_da_rivincita.astype(np.int64)) + 3 * rivincita
+        # Chiavi per rimescolare: dentro il blocco e il tipo (schema principale) o solo
+        # dentro il blocco (schema "libero"). Le partite senza y, o escluse da ogni ruolo,
+        # si scambiano solo tra loro: cosi' chi fa da esito e chi da precedente non cambia.
+        fuori = manca | (corta if opz.senza_corte else False)
+        self.chiave_tipo = (self.blk * 12 + self.tipo + 6 * fuori).astype(np.float64)
+        self.posti_tipo = np.argsort(self.chiave_tipo, kind="stable")
         # Attributi del blocco (dalla sua prima riga)
         giocatori, self.gioc_blk = np.unique(gid[self.primo], return_inverse=True)
         self.n_gioc = len(giocatori)
@@ -173,21 +221,33 @@ class DatiBlocchi:
         self.x_blk = (np.asarray(d["rating_rif"])[self.primo].astype(np.float64) - 1700.0) / 200.0
         self.chiave = self.blk.astype(np.float64)                # per rimescolare restando nel blocco
 
-    def ordine_casuale(self, rng, ultima_fissa):
-        """Ordine casuale delle partite dentro ogni blocco.
+    def ordine_casuale(self, rng, entro_tipo):
+        """Rimescola i RISULTATI delle partite dentro ogni blocco; la struttura resta ferma.
 
-        chiave = numero del blocco + numero casuale in [0, 1): ordinando per chiave ogni
-        partita resta nel suo blocco, ma in posizione casuale.
-        ultima_fissa: l'ultima partita del blocco resta ultima (le do il valore 1, il
-        piu' alto). Serve perche' la decisione di SMETTERE dipende dall'ultimo esito
-        (si smette piu' spesso dopo una sconfitta, o dopo una vittoria): l'ultima
-        partita non e' "una partita qualsiasi" e scambiarla con le altre falserebbe
-        il confronto. Le prime n-1, invece, sono scambiabili se l'ordine non conta.
+        Restituisce `ordine`: al posto i va il risultato della partita ordine[i].
+        Restano fermi al loro posto tutti gli attributi di struttura: quali partite
+        sono rivincite, quali fanno da esito, qual e' l'ultima. Si scambiano solo i
+        risultati (y e punteggio).
+
+        entro_tipo=True (schema principale): un risultato puo' finire solo al posto
+        di una partita dello stesso TIPO di selezione (vedi self.tipo). Motivo: la
+        decisione di smettere o di chiedere la rivincita dipende dal risultato appena
+        ottenuto, quindi il risultato dell'ultima partita, o di una partita seguita da
+        una rivincita, non e' "un risultato qualsiasi". Tra partite dello stesso tipo,
+        invece, se l'ordine non conta i risultati sono scambiabili.
+        entro_tipo=False (schema "libero"): scambi tra tutte le partite del blocco;
+        solo per confronto.
+
+        Tecnica: chiave = numero della classe + numero casuale in [0, 1). Ordinando per
+        chiave ottengo, classe per classe, le partite in ordine casuale; le assegno
+        ai posti della stessa classe, presi nel loro ordine naturale.
         """
         casuale = rng.random(self.n)
-        if ultima_fissa:
-            casuale[self.ultimo] = 1.0
-        return np.argsort(self.chiave + casuale)
+        if not entro_tipo:
+            return np.argsort(self.chiave + casuale)             # la classe e' il blocco: i posti sono gia' in ordine
+        ordine = np.empty(self.n, dtype=np.int64)
+        ordine[self.posti_tipo] = np.argsort(self.chiave_tipo + casuale)
+        return ordine
 
     def regressione(self, ordine, distanza):
         """Regressione dentro il blocco del residuo y sul residuo x di `distanza` partite prima.
@@ -201,7 +261,10 @@ class DatiBlocchi:
         prec = np.empty_like(ordine)
         prec[distanza:] = ordine[:-distanza]
         prec[:distanza] = ordine[:distanza]
-        ok = (self.pos >= distanza) & self.esito_ok[ordine] & self.prec_ok[prec]
+        # Chi fa da esito e chi da precedente dipende dal POSTO, non dal risultato che ci finisce
+        prec_ok_posto = np.zeros(self.n, dtype=bool)
+        prec_ok_posto[distanza:] = self.prec_ok[:-distanza]
+        ok = (self.pos >= distanza) & self.esito_ok & prec_ok_posto
         conta = lambda pesi: np.bincount(self.blk, weights=pesi, minlength=self.nb)
         x = self.y[prec] * ok
         yc = self.y[ordine] * ok
@@ -256,6 +319,96 @@ class DatiBlocchi:
         M[:, -1] = np.bincount(self.gioc_blk, weights=num * self.x_blk, minlength=self.n_gioc)
         return M
 
+    def somme_congiunte(self, per_tipo=True):
+        """Stima congiunta per distanza (P10): somme per giocatore e numero di coppie.
+
+        Per ogni partita t che fa da esito guardo SOLO il suo passato nel blocco:
+          x_d = risultato inatteso della partita di d posti prima (d = 1, 2, 3);
+          z_d = x_d - media dei risultati delle partite LONTANE (distanza 4 o piu')
+                che hanno lo stesso tipo di selezione della partita di d posti prima.
+        z_d dice se la partita di d posti prima e' andata meglio o peggio delle partite
+        lontane e confrontabili della stessa serata. Se l'ordine non conta, y_t non ha
+        motivo di seguire z_d; con un tilt a distanza d, a z_d basso segue y_t basso.
+
+        Stima: i tre coefficienti b_1, b_2, b_3 risolvono insieme le tre equazioni
+            somma_t y_t * z_d  =  somma_k b_k * (somma_t x_k * z_d)        d = 1, 2, 3
+        E' la regressione di y_t su x_1, x_2, x_3 in cui z fa da "strumento": b_d e'
+        l'effetto del risultato di d partite prima A PARITA' delle altre due.
+        tau_d = -b_d, che come per B si legge "dopo sconfitta - dopo vittoria".
+
+        Perche' cosi':
+          - il termine di paragone (le partite lontane) non contiene le distanze che
+            sto stimando: niente falso rimbalzo a +2;
+          - z usa solo partite PRECEDENTI a t: nessuna media di blocco che contenga
+            y_t, quindi nessuna distorsione delle sequenze corte e nessun rimescolamento;
+          - il confronto e' tra partite dello stesso tipo di selezione (seguite o no da
+            una rivincita, rivincite o no): chi smette e chi chiede la rivincita non
+            falsano il confronto. Nessuna condizione su cio' che succede DOPO t.
+        Ipotesi: dopo 3 partite l'effetto e' finito. Costo: servono almeno 4 partite
+        prima di t, quindi contano solo i blocchi con almeno 5 partite.
+
+        per_tipo=False confronta con tutte le partite lontane, senza guardare il tipo
+        (solo per confronto: se differisce, le regole di selezione contano).
+        Restituisce una riga per giocatore: 9 colonne (somma_t x_k * z_d) e 3 (somma_t y_t * z_d).
+        """
+        D = N_DISTANZE
+        e = self.esito_ok.astype(np.float64)                 # la partita puo' fare da esito
+        p = self.prec_ok.astype(np.float64)                  # la partita puo' fare da precedente
+        py = p * self.y
+        inizio = np.arange(self.n) - self.pos                # indice della prima partita del blocco
+
+        def spostato(v, d):
+            """Il valore di v nella partita di d posti prima nello stesso blocco (0 se non c'e')."""
+            w = np.zeros(self.n)
+            w[d:] = v[:-d]
+            return w * (self.pos >= d)
+
+        x = [spostato(py, d) for d in range(1, D + 1)]       # x_1, x_2, x_3
+        A, m, coppie = np.zeros((self.n_gioc, D * D)), np.zeros((self.n_gioc, D)), np.zeros(D)
+        gioc_riga = self.gioc_blk[self.blk]                  # il giocatore di ogni riga
+        per_giocatore = lambda v: np.bincount(gioc_riga, weights=v, minlength=self.n_gioc)
+        # Una partita precedente non e' mai l'ultima del blocco: i tipi con "seguito" = 2 non servono
+        tipi = [self.tipo == k for k in np.unique(self.tipo) if k % 3 != 2] if per_tipo else [np.ones(self.n, dtype=bool)]
+        for del_tipo in tipi:
+            q = p * del_tipo                                 # partite precedenti di questo tipo
+            qy = q * self.y
+            # Somma e numero delle partite di questo tipo PRIMA di t nel blocco: somma
+            # cumulata fino a t, meno la partita t, meno cio' che precede il blocco...
+            cum_y, cum_n = np.cumsum(qy), np.cumsum(q)
+            lont_y = cum_y - qy - (cum_y[inizio] - qy[inizio])
+            lont_n = cum_n - q - (cum_n[inizio] - q[inizio])
+            q_d = [spostato(q, d) for d in range(1, D + 1)]  # la partita di d posti prima e' di questo tipo?
+            # ...meno le tre piu' vicine: restano le LONTANE (distanza 4 o piu').
+            for d in range(D):
+                lont_y -= spostato(qy, d + 1)
+                lont_n -= q_d[d]
+            lont_n = np.round(lont_n)                        # e' un conteggio: tolgo gli errori di arrotondamento
+            media_lontane = lont_y / np.maximum(lont_n, 1.0)
+            for d in range(D):
+                usabile = e * q_d[d] * (lont_n > 0)          # t fa da esito, la partita a distanza d+1 e' del tipo, c'e' il paragone
+                z = usabile * (x[d] - media_lontane)
+                m[:, d] += per_giocatore(self.y * z)
+                for k in range(D):
+                    A[:, d * D + k] += per_giocatore(x[k] * z)
+                coppie[d] += usabile.sum()
+        return np.column_stack([A, m]), [int(c) for c in coppie]
+
+
+def stime_congiunte(S):
+    """Dalle somme di somme_congiunte: tau a distanza +1, +2, +3 (in frazione, non in pp).
+
+    Risolve il sistema A b = m (3 equazioni, 3 incognite) e restituisce tau = -b.
+    """
+    D = N_DISTANZE
+    S = np.atleast_2d(S)
+    A = S[:, :D * D].reshape(-1, D, D)
+    m = S[:, D * D:]
+    tau = np.full((len(S), D), np.nan)
+    risolvibile = np.abs(np.linalg.det(A)) > 1e-9
+    if risolvibile.any():
+        tau[risolvibile] = -np.linalg.solve(A[risolvibile], m[risolvibile][..., None])[..., 0]
+    return tau
+
 
 def tau_e_pendenza(S):
     """Dalle somme per colonna: tau per cella e pendenza di tau sul rating (per 200 punti)."""
@@ -287,17 +440,17 @@ def stimatore_B(con, analisi, gruppo, opz, rng, reg, righe_csv):
     reg.scrivi(f"\nStimatore B: {dati.n:,} partite in {dati.nb:,} blocchi di {dati.n_gioc:,} giocatori; "
                f"coppie utilizzabili {n_coppie:,}; blocchi con almeno 2 coppie {int((oss['residuo'][0] > 0).sum()):,}")
 
-    # Rimescolamenti: stessa statistica, ordine delle partite casuale dentro ogni blocco.
-    # Schema principale: ultima partita del blocco fissa. Schema "libero" (tutte le
-    # partite rimescolate): solo per confronto; se le due stime differiscono, la
-    # decisione di smettere dipende dall'ultimo esito.
+    # Rimescolamenti: stessa statistica, risultati scambiati a caso dentro ogni blocco.
+    # Schema principale: scambi solo tra partite dello stesso tipo di selezione (P11).
+    # Schema "libero" (scambi tra tutte le partite del blocco): solo per confronto; se
+    # le due stime differiscono, smettere e chiedere la rivincita dipendono dall'esito.
     K = opz.rimescolamenti
     M_rim = {v: np.zeros_like(M_oss[v]) for v in oss}
     M_lib = np.zeros_like(M_oss["residuo"])
     tau_rim = {v: np.empty((K, N_CELLE_B)) for v in oss}
     pend_rim = np.empty(K)
     for k in range(K):
-        rim, _ = dati.statistica(dati.ordine_casuale(rng, ultima_fissa=True))
+        rim, _ = dati.statistica(dati.ordine_casuale(rng, entro_tipo=True))
         for v in oss:
             Mk = dati.somme_giocatore(*rim[v])
             M_rim[v] += Mk / K
@@ -305,13 +458,34 @@ def stimatore_B(con, analisi, gruppo, opz, rng, reg, righe_csv):
             tau_rim[v][k] = tau_k
             if v == "residuo":
                 pend_rim[k] = pend_k
-        w_lib, num_lib, _, _ = dati.regressione(dati.ordine_casuale(rng, ultima_fissa=False), 1)
+        w_lib, num_lib, _, _ = dati.regressione(dati.ordine_casuale(rng, entro_tipo=False), 1)
         M_lib += dati.somme_giocatore(w_lib, num_lib) / K
         if (k + 1) % 50 == 0:
             print(f"  rimescolamento {k + 1}/{K} - {time.time() - t0:.0f} s")
 
-    # Decadimento con la distanza (H1b): effetto del risultato inatteso di 1, 2, 3 partite prima.
-    # Stesso ricampionamento dei giocatori per le tre distanze, cosi' si puo' stimare la differenza.
+    # Decadimento con la distanza (H1b), STIMA CONGIUNTA (P10): vedi somme_congiunte.
+    # Non usa i rimescolamenti; intervalli dal bootstrap sui giocatori, p-value normale.
+    # Generatore casuale a parte: aggiungere o togliere la stima congiunta non cambia
+    # i numeri casuali usati dal resto dello script.
+    M_c, coppie_c = dati.somme_congiunte(per_tipo=True)
+    M_c1, _ = dati.somme_congiunte(per_tipo=False)
+    tau_c = stime_congiunte(M_c.sum(axis=0))[0]
+    tau_c1 = stime_congiunte(M_c1.sum(axis=0))[0]
+    boot_c = stime_congiunte(bootstrap_somme(M_c, opz.bootstrap, np.random.default_rng([opz.seme, 10])))
+    righe_c = []
+    for j in range(N_DISTANZE):
+        lo, hi, es = intervallo(boot_c[:, j])
+        righe_c.append((f"partita +{j + 1}", coppie_c[j], 100 * tau_c[j], 100 * lo, 100 * hi, 100 * es,
+                        p_normale(tau_c[j], es), 100 * tau_c1[j]))
+    lo, hi, es = intervallo(boot_c[:, 0] - boot_c[:, 1])
+    diff = tau_c[0] - tau_c[1]
+    righe_c.append(("H1b: (+1) - (+2)", 0, 100 * diff, 100 * lo, 100 * hi, 100 * es, p_normale(diff, es),
+                    100 * (tau_c1[0] - tau_c1[1])))
+    tab_c = pd.DataFrame(righe_c, columns=["distanza", "coppie", "tau_pp", "ic95_da", "ic95_a", "err_std", "p",
+                                           "tau_senza_tipi_pp"])
+
+    # Regressioni SEPARATE per distanza, con rimescolamenti (come in P7): a +2 e +3 sono
+    # distorte se c'e' un effetto vero a +1 (P10). Restano solo per confronto.
     versioni_d = ["residuo", "residuo_d2", "residuo_d3"]
     nc = M_oss["residuo"].shape[1]
     S = bootstrap_somme(np.hstack([np.hstack([M_oss[v], M_rim[v]]) for v in versioni_d]), opz.bootstrap, rng)
@@ -372,11 +546,19 @@ def stimatore_B(con, analisi, gruppo, opz, rng, reg, righe_csv):
             "p": [p_pend, p_normale(diff_cl, es_d)], "tipo_p": ["permutazione", "normale"],
         })
         reg.tabella("Moderatori (stimatore B primario)", extra.round(4))
-        reg.tabella("Decadimento con la distanza (stimatore B): effetto del risultato di 1, 2, 3 partite prima; "
-                    "l'ultima riga usa un p-value normale, le altre di permutazione",
+        reg.tabella("DECADIMENTO CON LA DISTANZA - stima congiunta (P10): effetto del risultato inatteso di 1, 2, 3 "
+                    "partite prima, a parita' delle altre due; p-value normale",
+                    tab_c.round({"tau_pp": 2, "ic95_da": 2, "ic95_a": 2, "err_std": 2, "p": 4, "tau_senza_tipi_pp": 2}))
+        reg.scrivi("Termine di paragone: partite dello stesso blocco e dello stesso tipo, almeno 4 posti prima dell'esito. "
+                   "tau_senza_tipi: paragone con tutte le partite lontane; se differisce, le regole di selezione "
+                   "(smettere, chiedere la rivincita) contano.")
+        for r in tab_c.itertuples():
+            righe_csv.append(("B_distanza", r.distanza, r.tau_pp, r.ic95_da, r.ic95_a, r.err_std, r.p, r.coppie))
+        reg.tabella("Regressioni separate per distanza, con rimescolamenti (versione di P7): a +2 e +3 DISTORTE "
+                    "se c'e' un effetto vero a +1, solo per confronto",
                     tab_d.round({"distorsione_b_pp": 2, "tau_B_pp": 2, "ic95_da": 2, "ic95_a": 2, "err_std": 2, "p": 4}))
         for r in tab_d.itertuples():
-            righe_csv.append(("B_distanza", r.distanza, r.tau_B_pp, r.ic95_da, r.ic95_a, r.err_std, r.p, r.blocchi))
+            righe_csv.append(("B_distanza_separata", r.distanza, r.tau_B_pp, r.ic95_da, r.ic95_a, r.err_std, r.p, r.blocchi))
         for r in extra.itertuples():
             righe_csv.append(("B", r.stima, r.valore_pp, r.ic95_da, r.ic95_a, r.err_std, r.p, np.nan))
 
@@ -605,6 +787,26 @@ def stanchezza_e_interruzione(con, analisi, gruppo, opz, rng, reg, righe_csv):
                 f"- dopo vittoria ({100 * tot.sW / tot.nW:.1f}%), differenza in pp", tab.round(2))
     for r in tab.itertuples():
         righe_csv.append(("interruzione", r.cella, r.valore, r.ic95_da, r.ic95_a, r.err_std, np.nan, r.n_dopo_sconfitta + r.n_dopo_vittoria))
+
+    # Selezione: dopo una sconfitta si gioca la rivincita piu' spesso che dopo una vittoria?
+    # Dice quanto contano i tipi di selezione (P11): le rivincite non fanno da esito.
+    df = con.execute(f"""
+        SELECT gid, classe,
+               SUM(CASE WHEN prec_punteggio = 0 THEN (avv = prec_avv)::INTEGER ELSE 0 END) AS sL, SUM((prec_punteggio = 0)::INTEGER) AS nL,
+               SUM(CASE WHEN prec_punteggio = 1 THEN (avv = prec_avv)::INTEGER ELSE 0 END) AS sW, SUM((prec_punteggio = 1)::INTEGER) AS nW
+        FROM {analisi}
+        WHERE {filtri_comuni(gruppo, opz, con_lato=False)} AND pos_blocco > 1 AND prec_punteggio IN (0, 1)
+        GROUP BY ALL
+    """).df()
+    celle = [("tutte le classi", np.ones(len(df), dtype=bool))] + [(f"classe {c}", df["classe"] == c) for c in CLASSI]
+    tab, _ = differenze_con_bootstrap(df, celle, opz, rng)
+    tot = df[["sL", "nL", "sW", "nW"]].sum()
+    for col in ("valore", "ic95_da", "ic95_a", "err_std"):
+        tab[col] = 100 * tab[col]
+    reg.tabella(f"Selezione: probabilita' che la partita seguente dello stesso blocco sia una rivincita, dopo sconfitta "
+                f"({100 * tot.sL / max(tot.nL, 1):.1f}%) - dopo vittoria ({100 * tot.sW / max(tot.nW, 1):.1f}%), differenza in pp", tab.round(2))
+    for r in tab.itertuples():
+        righe_csv.append(("rivincita", r.cella, r.valore, r.ic95_da, r.ic95_a, r.err_std, np.nan, r.n_dopo_sconfitta + r.n_dopo_vittoria))
 
 
 def main():

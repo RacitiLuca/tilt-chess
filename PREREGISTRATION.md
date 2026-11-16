@@ -1,8 +1,8 @@
-# Tilt — Research plan and pre-registration (v1.2)
+# Tilt — Research plan and pre-registration (v1.3)
 
 Written on 15 November 2026, before any analysis of outcomes: so far only descriptive counts have been examined (`riassunto_dati.txt`, `statistiche_campione.txt`). Committed to GitHub before phase 3: the commit date shows that the hypotheses precede the results.
 
-_This is a faithful English translation of the original Italian plan (`PIANO_RICERCA_it.md`, v1), committed together with it. Section 11 records the amendments agreed after v1 was written and before any outcome analysis. Section 12 records the clarifications made at the end of phase 2, after testing the code on simulated data and before running any script on the real data (Italian original: `PRECISAZIONI_it.md`)._
+_This is a faithful English translation of the original Italian plan (`PIANO_RICERCA_it.md`, v1), committed together with it. Section 11 records the amendments agreed after v1 was written and before any outcome analysis. Section 12 records the clarifications made at the end of phase 2, after testing the code on simulated data and before running any script on the real data. Section 13 records a second set of clarifications, made before `08_tilt.py` (the script that compares games after a loss and after a win) was ever run on the real data. Italian original of sections 12 and 13: `PRECISAZIONI_it.md`._
 
 ## 1. Hypotheses
 
@@ -186,3 +186,70 @@ Written on Sunday 15 November 2026, at the end of phase 2, **before running any 
 - Error thresholds verified in the Lichess source code (`Advice.scala`): 0.1 / 0.2 / 0.3 on the −1 to +1 scale, i.e. 5 / 10 / 15 pp of Win%. They match the plan.
 - DuckDB memory limit: 4 GB by default (not 5), to leave headroom for Windows on 8 GB of RAM.
 - Number of shuffles (200) and bootstrap resamples (1000) confirmed: run times measured (see `HANDOFF.md`).
+
+## 13. Second set of clarifications, before running `08_tilt.py` (v1.3)
+
+Written on Monday 16 November 2026. At this date, `05`, `06`, `09` and `07` had been run on the real data (structural diagnostics; for the exploration group only, the mean residual by position in the session and the checks on the evaluated sample). **`08_tilt.py` had never been run on the real data**: no after-loss/after-win comparison had been seen. P10 and P11 come from tests on simulated data; P12 comes from reading the output of `09` on the exploration group, and this is stated openly. They must be committed before running `08`.
+
+In the tables: means over several independent simulations (different seeds) ± standard error of the mean, in pp; confirmation group of the simulated data, 4,000 players per simulation. A 30-Elo tilt is worth about −3.9 pp; 15 Elo about −1.95 pp.
+
+### P10. Decay curve and H1b test: joint estimate
+
+- **P7**: H1b = τ_B(+1) − τ_B(+2), with a separate regression for each distance, each corrected with shuffles. Stated limitation: at +2 and +3 the estimate is "pushed towards zero by 0.3–0.4 pp".
+- **Problem**: that limitation was wrong in sign and in size. With a true tilt only at +1 (about −3.9 pp), the separate regression at +2 gives **+0.88 ± 0.13** (7 seeds; seed 1: +1.09, 95% CI 0.42 to 1.78), at +3 +0.71 ± 0.19, and H1b −4.58 instead of −3.9. Without tilt the bias is absent (−0.24 ± 0.19). On the real data a tilt at +1 would have appeared as a false "rebound" two games later, and H1b, a confirmatory test, would have been inflated.
+- **Why**: once the block mean is removed, the products between all pairs of games in a block have a fixed sum. If pairs at distance 1 are more alike than average (tilt at +1), the other pairs must be less alike than average. Shuffles do not correct this: their benchmark is all pairs in the block, including those at distance 1.
+- **Now**: the three distances are estimated jointly, and the benchmark contains none of them. For each game t serving as an outcome, only its past within the block is used:
+  - x_d = unexpected result of the game d places earlier (d = 1, 2, 3);
+  - z_d = x_d − mean result of the _distant_ games (at least 4 places before t) in the same block and of the same selection type as the game d places earlier (types are defined in P11);
+  - the coefficients b_1, b_2, b_3 jointly solve Σ_t y_t z_d = Σ_k b_k Σ_t x_k z_d (d = 1, 2, 3); τ(+d) = −b_d.
+
+  This is the regression of y_t on the three previous results, in which the deviation from the distant games acts as an instrument: b_d is the effect of the result d games earlier, holding the other two fixed. No shuffles and no (1 − b) correction are needed, because z uses only games before t (no mean containing y_t) and imposes no condition on what happens after t.
+
+- **H1b test** (replaces the corresponding row of P7): τ(+1) − τ(+2) from the joint estimate; bootstrap over players, normal p, as in P7.
+- **Assumption and cost**: after 3 games the effect is over; only outcomes with at least 4 previous games in the block count (blocks of 5 games or more). In simulation the standard error at +1 is 0.42, against 0.32 for estimator B; with many rematches, 0.65 against 0.45.
+- The separate regressions remain in the output, labelled as biased.
+
+| Simulated scenario                       | Seeds | Joint +1     | +2           | +3           | H1b          | Separate +2 (P7) |
+| ---------------------------------------- | ----- | ------------ | ------------ | ------------ | ------------ | ---------------- |
+| No tilt                                  | 7     | −0.06 ± 0.22 | 0.07 ± 0.16  | 0.18 ± 0.15  | −0.13 ± 0.22 | −0.24 ± 0.19     |
+| Tilt 30 (−3.9 at +1)                     | 7     | −3.73 ± 0.15 | 0.18 ± 0.19  | 0.29 ± 0.15  | −3.92 ± 0.24 | **+0.88 ± 0.13** |
+| Tilt 30 and tilt2 15 (−3.9 and −1.95)    | 7     | −4.01 ± 0.28 | −1.73 ± 0.11 | 0.02 ± 0.18  | −2.28 ± 0.32 | −1.10 ± 0.09     |
+| No tilt, "realistic" rematches (see P11) | 4     | −0.20 ± 0.19 | 0.05 ± 0.34  | −0.12 ± 0.09 | −0.25 ± 0.20 | −0.13 ± 0.24     |
+| Tilt 30, "realistic" rematches           | 4     | −3.87 ± 0.26 | 0.10 ± 0.25  | −0.42 ± 0.25 | −3.98 ± 0.40 | **+1.08 ± 0.28** |
+
+Seed 1, as in the check that found the problem: `--tilt 30` → +1 −3.89 (95% CI −4.66 to −3.13), +2 **+0.60 (−0.29 to 1.41)**, +3 −0.15, H1b −4.49; `--tilt 30 --tilt2 15` → +1 −4.87 (−5.69 to −4.00), +2 −1.69 (−2.55 to −0.80), +3 −0.28, H1b −3.17. Over 11 scenarios and 55 simulations, the spread of the estimates across seeds is in line with the bootstrap standard error (ratios between 0.88 and 1.18).
+
+### P11. Shuffles: fixed structure, swaps within the selection type (replaces P3)
+
+- **P3**: shuffle the order of games within the block, last game fixed. In the code, each game moved together with its attributes (whether it is a rematch, whether it is the chosen side).
+- **Problem**: rematches do not serve as outcomes and come in streaks. Which games enter the regression is a _structure_ of the block, and the short-sequence bias depends on that structure (on how many games serve both as previous game and as outcome). Moving games together with their attributes scatters the rematches, so the structure of the shuffles is no longer the true one and b is underestimated. Evidence, **without any tilt**, with streaks of rematches (probability 0.75 of another rematch after a rematch), code of the previous commit: τ_B = +1.47, +1.26, +1.42, +0.89 over four seeds (mean **+1.26**; all four 95% CIs exclude zero, permutation p 0.005). If, in addition, a rematch is more likely after a loss (0.40 against 0.12): mean **+2.0**. In the real data, rematches make up between 26% (rapid) and 50% (bullet) of the pairs within blocks (`06_diagnostiche.txt`): the primary estimator would have had a positive bias, capable of hiding a tilt or of simulating a rebound.
+- **Now**:
+  1. the structure stays fixed: which games are rematches, which serve as outcomes, which is the last. Only the results (y and score) are swapped;
+  2. a result can only move to the place of a game of the same **selection type**: what follows the game (a different opponent, a rematch, the end of the block) × whether the game itself is a rematch. Stopping and asking for a rematch depend on the result just obtained: this is the same reason as the "last game fixed" of P3, extended to rematches. With `--rivincite`, only "last" counts.
+  - The `rim_libero` column swaps results among all games of the block, with the structure fixed: if it differs, the selection rules matter. The script also prints the probability of a rematch after a loss and after a win.
+- The observed statistic does not change; b and the permutation p-values of H1a and H1d do.
+- **Rule for H1a**: it stays on τ_B. If the joint estimate at +1 (P10) leads to a different verdict under the 1 pp rule, I report both and the verdict is "inconclusive".
+
+| Simulated scenario                                                                           | Seeds | τ_B, previous commit | τ_B, now     | `rim_libero` |
+| -------------------------------------------------------------------------------------------- | ----- | -------------------- | ------------ | ------------ |
+| No tilt                                                                                      | 7     | —                    | 0.14 ± 0.17  | 0.11 ± 0.15  |
+| No tilt, streaks of rematches (0.75)                                                         | 4     | **+1.26**            | 0.04 ± 0.13  | 0.01 ± 0.08  |
+| No tilt, streaks and rematch after a loss (0.40)                                             | 4     | **+2.01**            | −0.34 ± 0.27 | −0.11 ± 0.26 |
+| No tilt, rematch after a loss (0.60), no streaks                                             | 9     | —                    | 0.04 ± 0.14  | 0.00 ± 0.16  |
+| No tilt, "realistic": streaks, rematch after a loss 0.40, opponent keeps their true strength | 4     | —                    | 0.10 ± 0.16  | 0.24 ± 0.14  |
+| Tilt 30 (−3.9)                                                                               | 7     | —                    | −3.71 ± 0.09 | −3.76 ± 0.09 |
+| Tilt 30, "realistic"                                                                         | 4     | —                    | −3.39 ± 0.13 | −3.57 ± 0.18 |
+| Tilt 30 and tilt2 15                                                                         | 7     | —                    | −3.35 ± 0.15 | −3.43 ± 0.14 |
+
+- **Measured limitations** (all conservative, i.e. towards zero): τ_B is shrunk by 5% in the base simulator and by 13% in the realistic scenario (the (1 − b) correction is approximate, and swapping within type conditions on what follows the outcome game); by 14% if the effect lasts two games, because B assumes it lasts one. The joint estimate at +1 does not have these limitations (−3.87 and −4.01 in the same scenarios) but is less precise.
+- Unmeasured limitation: if stopping or asking for a rematch depends on more than the last result (for example on two losses in a row), the types are not enough.
+- New options in `tests/simula_dati.py` for these checks: `--rivincita-sconfitta`, `--rivincita-catena`, `--avversario-stabile`, `--verita`.
+
+### P12. Evaluated sample: the verdict of check 2 is read within the player
+
+Written after reading `09_controlli_eval_esplorazione.txt`; it does not concern any confirmatory test.
+
+- **Plan (section 7)**: "by player: does the probability that a game was analysed depend on the outcome of the previous game or on its own result?", with a threshold of 10% relative.
+- **Problem**: the script printed the verdict on the shares of all players pooled (table 2a). For "the game's own result" that comparison cannot say anything: every decided game has a winner and a loser, so the two shares are equal by construction (8.36% and 8.38%).
+- **Now**: the verdict uses the within-player comparison (table 2b). On the exploration group: outcome of the previous game 13.19% against 14.24%, i.e. −7.4% (within the threshold); the game's own result 12.59% against 16.24%, i.e. **−22.5% (beyond the threshold)**: among players whose games are only sometimes analysed, won games are analysed more often than lost ones.
+- **Consequence**, following the plan's rule: errors "after a loss" are not measured on Lichess evaluations, except for systematic analysers (89 players, 2.2% of analysed games) and with plan B (local Stockfish). This concerns H3 and the exploratory analysis of the type of loss, both outside this sprint. Question 1 uses the score of all games and is unaffected. Question 2 compares moves within the same game: it remains valid, but it applies to a sample in which 2017 "Classical" makes up 35.6% (against 23.0% among non-analysed games) and draws are analysed less often (5.3% against 8.4% of decided games): its curves must be read by class.

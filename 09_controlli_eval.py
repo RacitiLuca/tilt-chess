@@ -73,12 +73,10 @@ def main():
         ORDER BY 1, 2
     """).df()
     reg.tabella("Controllo 2a - quota di partite analizzate per esito (0 = sconfitta, 0.5 = patta, 1 = vittoria)", t.round(2))
-    verdetti = []
-    for nome, g in t.groupby("rispetto_a"):
-        q = g.set_index("esito")["perc_analizzate"]
-        rel = 100 * (q.get(0.0) / q.get(1.0) - 1)
-        verdetti.append(f"{nome}: sconfitta contro vittoria = {rel:+.1f}% relativo "
-                        f"({'OLTRE' if abs(rel) > 10 else 'entro'} la soglia del 10%)")
+    # Attenzione: nella tabella 2a il confronto sul "risultato della partita stessa" non
+    # puo' dire nulla. Ogni partita decisa ha un vincitore e uno sconfitto: contando
+    # tutti i giocatori insieme, le due quote sono uguali per costruzione. Il verdetto
+    # si legge sul confronto DENTRO il giocatore (2b), come scritto nel piano.
     # Stesso confronto dentro ogni giocatore (chi analizza a volte si', a volte no):
     # elimina il fatto che chi perde spesso potrebbe essere un tipo di giocatore che analizza di piu'.
     g = con.execute(f"""
@@ -98,8 +96,12 @@ def main():
     """).df()
     reg.tabella("Controllo 2b - stesso confronto dentro il giocatore (almeno 30 partite, tra 5% e 95% analizzate): medie delle quote individuali", g.round(2))
     reg.scrivi()
-    for v in verdetti:
-        reg.scrivi("VERDETTO " + v)
+    r = g.iloc[0]
+    for nome, persa, vinta in (("esito della partita precedente (stesso blocco)", r["analizzate_se_precedente_persa"], r["analizzate_se_precedente_vinta"]),
+                               ("risultato della partita stessa", r["analizzate_se_persa"], r["analizzate_se_vinta"])):
+        rel = 100 * (persa / vinta - 1)
+        reg.scrivi(f"VERDETTO (dentro il giocatore) {nome}: sconfitta contro vittoria = {rel:+.1f}% relativo "
+                   f"({'OLTRE' if abs(rel) > 10 else 'entro'} la soglia del 10%)")
 
     # ---- Controllo 3: analizzatori sistematici
     s = con.execute(f"""
