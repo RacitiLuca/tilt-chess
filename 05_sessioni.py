@@ -15,17 +15,6 @@ Cosa fa:
      nella sessione, esito della partita precedente, blocco di analisi, rating
      di riferimento.
 
-Scelte importanti (da saper difendere):
-  - Ordino SEMPRE per (inizio, game_id): il file di Lichess non e' in ordine.
-  - L'orario di fine non esiste nei dati: lo stimo come inizio + tempo consumato
-    dai due orologi. E' una stima per difetto (mancano ritardi di rete e attese).
-  - Sessione = partite dello stesso giocatore con pause fino a 30 minuti.
-  - Blocco = sequenza ininterrotta, dentro una sessione, di partite valide,
-    fuori torneo, della stessa classe di cadenza e non sovrapposte. Dentro un
-    blocco ogni partita (tranne la prima) ha una "partita precedente" valida.
-  - Lavoro a "secchi" di giocatori (gid % 8): le finestre SQL sono per giocatore,
-    quindi posso elaborare un ottavo dei giocatori alla volta senza cambiare il
-    risultato e senza superare la RAM.
 
 Uso (PowerShell, nella cartella C:\\tilt):
     .\\.venv\\Scripts\\python 05_sessioni.py

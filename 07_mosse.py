@@ -10,20 +10,6 @@ Cosa fa:
   2. data/errori_partita.parquet -> una riga per (partita, colore): perdita
      media e numero di errori. E' l'esito secondario per la domanda 1.
 
-Scelte importanti (da saper difendere):
-  - La valutazione [%eval] e' in pedoni dal punto di vista del Bianco, DOPO la
-    mossa. La "perdita" di una mossa e' il calo della probabilita' di vittoria
-    di chi muove, tra la posizione prima e dopo la sua mossa.
-  - Probabilita' di vittoria (formula di Lichess, cp = centipedoni):
-        Win% = 50 + 50 * (2 / (1 + exp(-0.00368208 * cp)) - 1)
-    con cp limitati a +-1000 e matto = +-1000. Rispetto ai centipedoni grezzi,
-    pesa poco gli errori in posizioni gia' decise (da +8 a +5 non cambia quasi nulla).
-  - Soglie di Lichess (verificate nel sorgente, Advice.scala): calo di 0.1, 0.2,
-    0.3 sulla scala da -1 a +1, cioe' 5, 10 e 15 punti percentuali di Win%.
-    I simboli ?!, ?, ?? scritti nel PGN del 2017 seguono regole vecchie: li ignoro.
-  - Tempo residuo = orologio di chi muove PRIMA di pensare (cioe' dopo la sua
-    mossa precedente): e' il tempo che ha davanti quando deve decidere.
-
 Uso (PowerShell, nella cartella C:\\tilt):
     .\\.venv\\Scripts\\python 07_mosse.py
 Prova veloce sulle prime 20.000 partite:

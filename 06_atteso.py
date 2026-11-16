@@ -10,21 +10,6 @@ Cosa fa:
   3. y = residuo corretto per la posizione nella sessione (stanchezza media);
   4. la "base" del giocatore: media dei suoi y in tutte le ALTRE sessioni.
 
-Scelte importanti (da saper difendere):
-  - E non viene dalla formula Elo: e' una curva EMPIRICA, stimata sulle prime
-    partite di sessione (dove il rating non e' ancora toccato dagli esiti della
-    sessione), per classe e colore. Lichess usa Glicko-2 e la formula Elo
-    teorica non e' calibrata su questi dati.
-  - Dopo una sconfitta il rating scende e l'avversario assegnato e' in media
-    piu' debole: per questo E si calcola con il rating di RIFERIMENTO (inizio
-    sessione), che non dipende dall'esito studiato.
-  - La base esclude la sessione in corso: se la includessi, l'esito precedente
-    entrerebbe nella media e creerebbe una correlazione artificiale.
-  - Curva E, correzione per posizione e basi sono quantita' "di servizio":
-    si calcolano su tutti i giocatori. Le stampe con ESITI, invece, mostrano
-    solo il gruppo di esplorazione: il gruppo di conferma si guarda una volta
-    sola, con 08_tilt.py --gruppo conferma.
-
 Uso (PowerShell, nella cartella C:\\tilt):
     .\\.venv\\Scripts\\python 06_atteso.py
 Robustezza (dopo 05_sessioni.py --soglia 10):
