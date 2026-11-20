@@ -1,0 +1,135 @@
+Gruppo: conferma | variante: _s60 | seme 20170501
+
+Stimatore B: 12,108,499 partite in 2,017,477 blocchi di 63,700 giocatori; coppie utilizzabili 3,323,262; blocchi con almeno 2 coppie 696,673
+
+== STIMATORE B (primario): regressione sul risultato inatteso della partita precedente - 200 rimescolamenti, 1000 ricampionamenti ==
+           cella  blocchi  tau_dentro_blocco_pp  distorsione_b_pp  tau_B_pp  ic95_da  ic95_a  err_std  p_permutazione  tau_B_rim_libero_pp
+           tutte   696673                 12.00             12.14     -0.16    -0.32   -0.00     0.08          0.0448                -0.24
+   classe bullet   145019                  7.94              7.82      0.12    -0.15    0.40     0.14          0.3731                 0.07
+    classe blitz   383376                 12.48             12.68     -0.22    -0.43   -0.01     0.11          0.0498                -0.31
+    classe rapid   168278                 17.20             17.60     -0.49    -0.85   -0.12     0.19          0.0100                -0.54
+    rating <1400   153224                 14.02             14.25     -0.27    -0.63    0.10     0.18          0.1294                -0.27
+rating 1400-1599   183348                 12.48             12.78     -0.35    -0.66   -0.06     0.16          0.0249                -0.40
+rating 1600-1799   188698                 11.52             11.59     -0.08    -0.35    0.20     0.14          0.5672                -0.17
+rating 1800-1999   116153                 10.87             10.78      0.10    -0.25    0.46     0.19          0.5473                -0.02
+   rating >=2000    55250                  9.74              9.88     -0.16    -0.65    0.39     0.27          0.4975                -0.32
+
+== Moderatori (stimatore B primario) ==
+                                          stima  valore_pp  ic95_da  ic95_a  err_std      p       tipo_p
+H1d: pendenza di tau_B per +200 punti di rating     0.0464  -0.0713  0.1734   0.0602 0.4030 permutazione
+                H1c: tau_B bullet - tau_B rapid     0.6105   0.1466  1.0366   0.2343 0.0092      normale
+
+== DECADIMENTO CON LA DISTANZA - stima congiunta (P10): effetto del risultato inatteso di 1, 2, 3 partite prima, a parita' delle altre due; p-value normale ==
+        distanza  coppie  tau_pp  ic95_da  ic95_a  err_std      p  tau_senza_tipi_pp
+      partita +1 1398979   -0.66    -0.85   -0.46     0.11 0.0000              -0.69
+      partita +2 1340297   -0.64    -0.84   -0.43     0.10 0.0000              -0.65
+      partita +3 1352132   -0.36    -0.56   -0.15     0.10 0.0005              -0.48
+H1b: (+1) - (+2)       0   -0.02    -0.29    0.23     0.13 0.8569              -0.04
+Termine di paragone: partite dello stesso blocco e dello stesso tipo, almeno 4 posti prima dell'esito. tau_senza_tipi: paragone con tutte le partite lontane; se differisce, le regole di selezione (smettere, chiedere la rivincita) contano.
+
+== Regressioni separate per distanza, con rimescolamenti (versione di P7): a +2 e +3 DISTORTE se c'e' un effetto vero a +1, solo per confronto ==
+        distanza  blocchi  distorsione_b_pp  tau_B_pp  ic95_da  ic95_a  err_std      p
+      partita +1   696673             12.14     -0.16    -0.32   -0.01     0.08 0.0448
+      partita +2   525964              7.63     -0.30    -0.47   -0.14     0.08 0.0050
+      partita +3   412400              5.35     -0.30    -0.49   -0.13     0.09 0.0050
+H1b: (+1) - (+2)        0               NaN      0.14    -0.11    0.37     0.13 0.2614
+
+Stimatore B con peso uguale per giocatore (37,881 giocatori con peso >= 2.0): -0.24 pp  [IC95 -0.45, -0.00]
+
+== Stimatore B come pre-registrato (dopo sconfitta - dopo vittoria): DISTORTO dall'abbinamento, solo per confronto - 200 rimescolamenti, 1000 ricampionamenti ==
+           cella  blocchi  tau_dentro_blocco_pp  distorsione_b_pp  tau_B_pp  ic95_da  ic95_a  err_std  p_permutazione
+           tutte   457706                 10.69             11.34     -0.74    -0.88   -0.60     0.07          0.0050
+   classe bullet   104767                  6.84              7.23     -0.42    -0.66   -0.17     0.13          0.0050
+    classe blitz   252522                 11.17             11.92     -0.85    -1.05   -0.65     0.10          0.0050
+    classe rapid   100417                 15.75             16.57     -0.98    -1.33   -0.61     0.19          0.0050
+    rating <1400    98189                 12.51             13.24     -0.84    -1.18   -0.53     0.17          0.0050
+rating 1400-1599   121169                 11.04             11.97     -1.06    -1.36   -0.76     0.15          0.0050
+rating 1600-1799   125498                 10.27             10.87     -0.67    -0.93   -0.40     0.14          0.0050
+rating 1800-1999    77347                  9.66             10.03     -0.41    -0.76   -0.07     0.18          0.0249
+   rating >=2000    35503                  8.75              9.13     -0.42    -0.92    0.08     0.26          0.0597
+(stimatore B: 1007 s)
+
+== STIMATORE A (tra sessioni): tau in pp = dopo sconfitta - dopo vittoria ==
+                                               cella  n_dopo_sconfitta  n_dopo_vittoria  valore  ic95_da  ic95_a  err_std   p
+                    H1a: stessa sessione, partita +1           1521821          1664337   -2.44    -2.55   -2.33     0.06 0.0
+                                       classe bullet            369479           406870   -1.96    -2.18   -1.75     0.11 0.0
+                                        classe blitz            813453           887787   -2.38    -2.52   -2.23     0.07 0.0
+                                        classe rapid            338889           369680   -3.12    -3.34   -2.91     0.11 0.0
+                                        rating <1400            344820           340711   -3.01    -3.25   -2.78     0.12 0.0
+                                    rating 1400-1599            405551           428525   -3.00    -3.22   -2.79     0.11 0.0
+                                    rating 1600-1799            415707           458462   -2.35    -2.55   -2.13     0.11 0.0
+                                    rating 1800-1999            248511           289915   -1.96    -2.24   -1.71     0.13 0.0
+                                       rating >=2000            107232           146724   -1.67    -2.05   -1.29     0.20 0.0
+                                   pausa fino a 15 s             15078            16237   -3.41    -4.49   -2.21     0.57 0.0
+                                       pausa 15-60 s            735514           769884   -2.70    -2.86   -2.55     0.08 0.0
+                                       pausa 1-5 min            435174           531916   -2.26    -2.45   -2.06     0.10 0.0
+                                pausa 5 min - soglia            336055           346300   -2.11    -2.35   -1.88     0.12 0.0
+                                  pausa fino a 5 min           1185766          1318037   -2.51    -2.64   -2.39     0.06 0.0
+CONTROLLO NEGATIVO: oltre la soglia (altra sessione)            602313           489498   -1.50    -1.68   -1.32     0.09 0.0
+                                  pausa soglia - 6 h            283446           234602   -1.72    -1.98   -1.48     0.13 0.0
+                                     pausa oltre 6 h            318867           254896   -1.30    -1.54   -1.05     0.13 0.0
+                         distanza +2 (stesso blocco)           1441888          1550236   -2.22    -2.33   -2.11     0.06 0.0
+                         distanza +3 (stesso blocco)           1264993          1341297   -2.04    -2.17   -1.93     0.06 0.0
+  senza base del giocatore (confronto quasi ingenuo)           1527305          1670988   -2.72    -2.83   -2.61     0.06 0.0
+        H1b: pausa fino a 5 min - controllo negativo                 0                0   -1.01    -1.22   -0.79     0.11 0.0
+                                 H1c: bullet - rapid                 0                0    1.16     0.85    1.45     0.15 0.0
+
+Stimatore A, H1a con peso uguale per giocatore (49,527 giocatori con almeno 5 + 5 coppie): -2.81 pp  (errore standard 0.08)
+
+== VERIFICA CAUSALE 1 - finali al fotofinish: tau in pp nella partita successiva (perdente - vincitore, ciascuno rispetto alla propria base) ==
+                                      cella  n_dopo_sconfitta  n_dopo_vittoria  valore  ic95_da  ic95_a  err_std      p
+            fotofinish: vincitore entro 3 s            103791           105779   -0.55    -0.95   -0.12     0.21 0.0079
+            robustezza: vincitore entro 5 s            159744           162794   -0.64    -0.99   -0.30     0.17 0.0002
+robustezza: entro 3 s e perdente entro 10 s            103294           105134   -0.56    -0.97   -0.13     0.21 0.0068
+                   entro 3 s, classe bullet             77281            78959   -0.32    -0.77    0.18     0.24 0.1754
+                    entro 3 s, classe blitz             25419            25770   -1.35    -2.20   -0.46     0.43 0.0017
+                    entro 3 s, classe rapid              1091             1050    2.27    -1.57    6.22     2.07 0.2728
+
+== Bilanciamento prima del fotofinish (perdenti n=103,791, vincitori n=105,779); differenza standardizzata: sotto 0,1 in valore assoluto = gruppi simili ==
+           variabile  perdenti  vincitori  diff_standardizzata
+    vantaggio_rating   -14.431     15.796               -0.267
+         atteso_in_G     0.471      0.502               -0.252
+              rating  1661.898   1677.288               -0.056
+  posizione_sessione    16.336     15.711                0.023
+             base_pp    -0.091     -0.132                0.012
+punteggio_prima_di_G     0.499      0.524               -0.051
+
+== Curva della stanchezza: residuo medio per posizione nella sessione (pp) ==
+                cella  partite  residuo_pp  ic95_da  ic95_a  err_std
+    bullet, partita 1   175930        0.05    -0.18    0.27     0.11
+    bullet, partita 2   143348        1.75     1.51    1.99     0.12
+    bullet, partita 3   122034        1.76     1.50    2.02     0.13
+  bullet, partita 4-5   197324        1.88     1.68    2.08     0.10
+ bullet, partita 6-10   329652        1.94     1.79    2.09     0.08
+bullet, partita 11-20   336195        2.58     2.41    2.76     0.09
+  bullet, partita 21+   470831        2.56     2.36    2.77     0.10
+     blitz, partita 1   683359       -0.02    -0.13    0.09     0.06
+     blitz, partita 2   491925        0.54     0.41    0.66     0.07
+     blitz, partita 3   367077        0.58     0.43    0.73     0.08
+   blitz, partita 4-5   501302        0.77     0.63    0.91     0.07
+  blitz, partita 6-10   616114        1.13     1.01    1.24     0.06
+ blitz, partita 11-20   402304        1.06     0.90    1.22     0.08
+   blitz, partita 21+   241207        1.14     0.90    1.39     0.12
+     rapid, partita 1   423096        0.11    -0.02    0.27     0.07
+     rapid, partita 2   280718        0.31     0.14    0.47     0.09
+     rapid, partita 3   188869        0.63     0.42    0.83     0.10
+   rapid, partita 4-5   227487        0.52     0.33    0.72     0.10
+  rapid, partita 6-10   222119        0.50     0.30    0.68     0.10
+ rapid, partita 11-20   103066        0.23    -0.06    0.56     0.16
+   rapid, partita 21+    35659        0.15    -0.43    0.75     0.31
+
+== Selezione: probabilita' di chiudere la sessione dopo sconfitta (21.6%) - dopo vittoria (17.3%), differenza in pp ==
+          cella  n_dopo_sconfitta  n_dopo_vittoria  valore  ic95_da  ic95_a  err_std   p
+tutte le classi           6176139          6284476    4.31     4.18    4.45     0.07 0.0
+  classe bullet           1681638          1716157    2.20     2.02    2.41     0.10 0.0
+   classe blitz           3104273          3153142    4.56     4.37    4.74     0.09 0.0
+   classe rapid           1390228          1415177    6.30     6.02    6.56     0.14 0.0
+
+== Selezione: probabilita' che la partita seguente dello stesso blocco sia una rivincita, dopo sconfitta (35.0%) - dopo vittoria (33.0%), differenza in pp ==
+          cella  n_dopo_sconfitta  n_dopo_vittoria  valore  ic95_da  ic95_a  err_std   p
+tutte le classi           4696796          4989151    1.95     1.74    2.19     0.11 0.0
+  classe bullet           1463893          1540353    2.34     1.92    2.79     0.22 0.0
+   classe blitz           2333636          2485621    1.72     1.49    1.93     0.11 0.0
+   classe rapid            899267           963177    1.59     1.31    1.88     0.15 0.0
+
+Stime salvate in output\08_stime_conferma_s60.csv - tempo totale 17.3 minuti
