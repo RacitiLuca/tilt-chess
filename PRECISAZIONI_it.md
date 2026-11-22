@@ -129,3 +129,110 @@ Scritta dopo aver letto `09_controlli_eval_esplorazione.txt`; non riguarda alcun
 - **Problema**: lo script stampava il verdetto sulle quote di tutti i giocatori insieme (tabella 2a). Per il «risultato della partita stessa» quel confronto non può dire nulla: ogni partita decisa ha un vincitore e uno sconfitto, quindi le due quote sono uguali per costruzione (8,36% e 8,38%).
 - **Ora**: il verdetto usa il confronto dentro il giocatore (tabella 2b). Sul gruppo esplorazione: esito della partita precedente 13,19% contro 14,24%, cioè −7,4% (entro la soglia); risultato della partita stessa 12,59% contro 16,24%, cioè **−22,5% (oltre la soglia)**: tra i giocatori le cui partite sono analizzate solo a volte, quelle vinte lo sono più spesso di quelle perse.
 - **Conseguenza**, secondo la regola del piano: gli errori «dopo una sconfitta» non si misurano sulle valutazioni di Lichess, se non sugli analizzatori sistematici (89 giocatori, 2,2% delle partite analizzate) e con il piano B (Stockfish in locale). Riguarda H3 e l'analisi esplorativa sul tipo di sconfitta, entrambe fuori da questo sprint. La domanda 1 usa il punteggio di tutte le partite e non è toccata. La domanda 2 confronta mosse della stessa partita: resta valida, ma vale per un campione in cui il «Classical» del 2017 pesa il 35,6% (contro il 23,0% tra le partite non analizzate) e le patte sono analizzate meno spesso (5,3% contro 8,4% delle partite decise): le curve vanno lette per classe.
+
+---
+
+# Terza serie di precisazioni (P13): domanda 2, pressione del tempo
+
+Scritta martedì 17 novembre 2026, di notte. A questa data **`11_pressione.py` non è mai stato eseguito sui dati veri**, su nessuno dei due gruppi: delle mosse sono stati visti solo il riassunto generale stampato da `07_mosse.py` e i controlli di `09`. Nessun confronto tra mosse con poco e con molto tempo è stato visto. La domanda 1 invece è chiusa: i suoi quattro p-value sono noti, e lo dichiaro perché servono a Holm (P13.4). Tutto nasce da prove su mosse simulate (`tests/simula_mosse.py`), in cui l'effetto vero è noto. Va committata (tradotta in una sezione 14 di `PREREGISTRATION.md`) insieme a `11_pressione.py` **prima** di lanciarlo.
+
+## P13.1 Campione e variabili (scelte che il piano non fissava)
+
+- **Mosse**: `data/mosse.parquet` unite a `data/analisi` per partita e colore. Entra una mossa se ha perdita, Win% prima della mossa e tempo residuo (la prima semimossa della partita non ha un «prima») e se la partita è valida, con valutazioni, **senza incremento**, di classe bullet, blitz o rapid (soglie attuali).
+- **Gruppo**: quello di chi muove. I due giocatori di una partita possono stare in gruppi diversi: ognuno porta solo le proprie mosse.
+- **Tornei inclusi** (il piano non li esclude; nel berserk conta comunque l'orologio di chi muove). **Rating stabile non richiesto**: qui il rating serve solo a mettere il giocatore in una fascia. Varianti di robustezza: `--senza-tornei`, `--stabile`.
+- **Errore grave** = giudizio 3 di `07_mosse.py` (perdita di almeno 15 punti di Win%). **Perdita media**: le perdite negative (rumore del motore) contano zero.
+- **Tempo residuo** = `clk_prima`, in secondi interi. Fasce chiuse a sinistra: 0–2, 3–4, 5–9, 10–19, 20–39, 40–79, 80–159, 160 e oltre. Riferimento delle curve: 20–40 s, l'unica fascia centrale che esiste in tutte le classi.
+- **Strati** («a parità di fase e di equilibrio»), incrociati tra loro, 6 × 7 × 7 = 294:
+  - numero di mossa del giocatore: 1–10, 11–20, 21–30, 31–40, 41–50, 51 e oltre;
+  - catture già avvenute nella partita: 0–3, 4–7, 8–11, 12–15, 16–19, 20–23, 24 e oltre;
+  - Win% prima della mossa: sotto 15 (un errore grave è impossibile), 15–30, 30–45, 45–55, 55–70, 70–85, 85 e oltre.
+- **Livello**: rating di riferimento della riga, nelle cinque fasce del piano.
+- **Coppia** = partita × giocatore: è l'unità di cui si toglie il livello.
+
+## P13.2 Modello moltiplicativo al posto di quello additivo (deviazione dal piano)
+
+- **Piano**: «confronto dentro la stessa partita e lo stesso giocatore (sottraggo la media della coppia partita-giocatore)», cioè un modello additivo: errore grave = a[coppia] + β[fascia di tempo] + γ[strato].
+- **Problema**: se le coppie hanno livelli di errore diversi e il livello *moltiplica* il rischio (chi sbaglia il doppio lo fa in ogni fase), nelle coppie che sbagliano di più il rischio sale di più, in valore assoluto, col passare delle mosse. Il modello additivo non può rappresentarlo e lo attribuisce al tempo, che in ogni partita cala col passare delle mosse. Prova, **senza alcun effetto del tempo**: +0,68 ± 0,06 pp (6 semi, differenza grezza 3 pp) nello scenario di base; con 240.000 partite, +0,34 ± 0,04 senza abbandoni e 0,00 ± 0,04 se tutte le coppie di uno stesso livello hanno lo stesso rischio. Con una struttura diversa il segno si inverte (−0,46 pp in `tests/verifica_11.py`): la direzione dell'errore non è prevedibile.
+- **Ora** (primario): modello moltiplicativo, cioè una regressione di Poisson a effetti fissi:
+  probabilità di errore grave = a[coppia] × B[fascia di tempo] × C[strato].
+  B[k] / B[j] è il **rapporto di rischio** (RR) tra due fasce di tempo, nella stessa partita, per lo stesso giocatore e nello stesso strato. Il livello della coppia si toglie dividendo, non sottraendo. Non richiede che gli errori seguano una Poisson: basta che la media abbia questa forma. Le coppie senza errori gravi e gli strati dove l'errore è impossibile non danno informazione e pesano zero da soli.
+- **Effetto in punti percentuali**, da riportare accanto al RR: tra le mosse giocate con meno di 10 secondi, tasso osservato × (1 − 1/RR), cioè quanti errori gravi in più ogni 100 mosse rispetto alle stesse mosse senza il rapporto di rischio.
+- Il modello additivo resta nell'output, in pp, etichettato «modello del piano»: non entra nei verdetti.
+- **Stima**: aggiustamento proporzionale iterato (30 giri), poi passi di Newton. Gli strati sono stimati sul gruppo analizzato, insieme al resto: nessuna quantità di servizio viene dall'altro gruppo.
+- **Inferenza**: bootstrap a grappolo sui giocatori, 1000 ricampionamenti, seme 20170501. Si ricampionano i contributi di ogni giocatore alla stima (la somma, sulle sue mosse, di «osservato − previsto», passata per l'inversa della matrice d'informazione del modello completo): l'incertezza sugli strati è compresa, la matrice resta quella del campione intero. Tutte le celle di una classe usano gli stessi ricampionamenti. Intervalli: percentili 2,5 e 97,5. p-value: normale a due code, stima / errore standard del bootstrap (come H1b e H1c in P7).
+- **Controlli d'identità** (`tests/verifica_11.py`, superati): stessi coefficienti di una regressione a forza bruta con una dummy per coppia (scarto 1e-13 per l'additivo, 1e-16 per il moltiplicativo); stesso errore standard robusto; su dati davvero moltiplicativi il RR inserito è ritrovato (log RR vero 0 → −0,004 ± 0,003; vero 0,693 → 0,701 ± 0,003) e la dispersione delle stime su 150 repliche è 0,94–1,10 volte l'errore standard calcolato.
+
+## P13.3 Statistiche dei due test confermativi (sul blitz, come nel piano)
+
+| Ipotesi | Statistica | Test | Previsione |
+|---|---|---|---|
+| H2a | log RR di «meno di 10 secondi» contro «10 secondi o più», blitz, tutti i livelli | bootstrap sui giocatori, p normale a due code | > 0 |
+| H2b | pendenza del log RR sulle cinque fasce di livello: Σ c_f · log RR_f con c = (−2, −1, 0, 1, 2) / 10. È la retta ai minimi quadrati su cinque punti equidistanti e si legge «per fascia di livello» (circa 200 punti). Un modello separato per fascia, stessi ricampionamenti | bootstrap sui giocatori, p normale a due code | < 0 |
+
+- Ogni ipotesi ha due parti; il test confermativo ne copre una, l'altra è descrittiva:
+  - H2a, «con un'impennata sotto i 10 secondi»: curva a 8 fasce e indice di impennata = [log RR(5–10) − log RR(10–20)] − [log RR(10–20) − log RR(20–40)]. Le tre fasce raddoppiano: l'indice è positivo se il rischio accelera sotto i 10 secondi.
+  - H2b, «i forti sbagliano meno a ogni livello di tempo»: per fascia di livello e di tempo, errori gravi osservati / attesi (atteso = tasso medio della classe nello stesso strato e nella stessa fascia di tempo); differenza tra ≥ 2000 e < 1400 con IC95.
+- In parallelo, descrittiva: perdita media di Win% (rapporto moltiplicativo e differenza additiva).
+- Una cella entra solo con almeno 200 errori gravi sotto i 10 secondi. Se una fascia di livello non ci arriva nel blitz, H2b non è calcolabile e conta come non rifiutata.
+- Bullet e rapid, le curve per livello e tutte le altre stime: descrittive, da riportare con intervalli (e correzione FDR se si riportano p-value).
+
+## P13.4 Holm: le soglie che spettano a H2a e H2b
+
+- La famiglia resta di sei test al 5%. I quattro p-value della domanda 1 sono noti: H1c 0,0009; H1a 0,42; H1d 0,49; H1b 0,94.
+- Holm ordina i sei p-value e li confronta con 0,05/6, 0,05/5, 0,05/4… fermandosi al primo non rifiutato. Dato che 0,0009 supera qualunque soglia e gli altri tre sono sopra 0,05, la regola per la domanda 2 diventa:
+  - il **più piccolo** tra p(H2a) e p(H2b) è rifiutato se è **≤ 0,0100** (0,05/5);
+  - il **più grande** è rifiutato solo se lo è il primo e se è **≤ 0,0125** (0,05/4).
+- I verdetti della domanda 1 non possono cambiare: H1c resta rifiutata qualunque cosa esca, le altre tre restano non rifiutate. Lo script stampa la tabella completa.
+- Come per H1c: un'uguaglianza rifiutata **nel verso opposto** alla previsione smentisce l'ipotesi.
+
+## P13.5 Regole di lettura (fissate prima di eseguire)
+
+Il piano non fissava una soglia di rilevanza per la domanda 2. La fisso ora, sopra l'errore del metodo misurato in simulazione (P13.6).
+
+- **H2a** (RR nel blitz, tutti i livelli):
+  - **confermata**: uguaglianza rifiutata con Holm e IC95 del RR tutto sopra **1,10**;
+  - **smentita**: uguaglianza rifiutata e IC95 tutto sotto 0,90;
+  - **trascurabile**: IC95 tutto tra 0,91 e 1,10;
+  - **inconcludente**: negli altri casi.
+  - «Impennata» si scrive solo se l'IC95 dell'indice di impennata è tutto sopra zero; altrimenti «cresce al calare del tempo», senza «impennata».
+- **H2b** (pendenza nel blitz):
+  - seconda parte **confermata**: uguaglianza rifiutata e pendenza negativa;
+  - seconda parte **smentita**: uguaglianza rifiutata e IC95 tutto sopra **+0,04** (in simulazione la pendenza ha un errore positivo fino a +0,035);
+  - **non confermata**: negli altri casi.
+  - prima parte: «a ogni livello di tempo» regge se, in tutte le fasce di tempo con dati, l'IC95 di (≥ 2000) − (< 1400) sul rapporto osservati/attesi è tutto sotto zero.
+  - H2b è confermata per intero solo se reggono entrambe le parti; altrimenti si dice quale.
+- I verdetti valgono per il gruppo conferma. L'esplorazione serve a provare il codice; dopo l'esplorazione il codice si cambia solo per errori di esecuzione o di identità, dichiarati in una P14 prima della conferma.
+- **Frasi**: «si commettono più errori gravi», non «si gioca peggio»; il RR sempre con l'equivalente in pp e con il tasso di base; mai «causa»: una posizione difficile fa consumare tempo e resta difficile (limite del piano). Il risultato vale per le partite analizzate dal motore, senza incremento, e si legge per classe (P12).
+
+## P13.6 Collaudo su mosse simulate
+
+`tests/collaudo_11.py`: 120.000 partite e 10.000 giocatori per simulazione, gruppo conferma dei dati simulati, blitz; media ± errore standard tra semi. Il simulatore ha livelli di errore diversi per coppia (legati al ritmo di gioco), abbandono di chi è perso, matto, caduta della bandierina. «Vero» per H2a = rapporto tra il rischio relativo inserito sotto i 10 secondi e quello inserito sopra.
+
+| Scenario simulato | Semi | H2a vero | H2a stimato | H2b vero | H2b stimato | Additivo (pp) | Finestre (log RR) |
+|---|---|---|---|---|---|---|---|
+| Nessun effetto del tempo | 6 | 0 | **0,031 ± 0,006** | 0 | 0,002 ± 0,006 | **0,68 ± 0,06** | **0,118 ± 0,006** |
+| Nessun effetto, difficoltà nascosta della posizione | 2 | 0 | **−0,057 ± 0,006** | 0 | 0,028 ± 0,012 | 0,29 ± 0,09 | 0,094 ± 0,013 |
+| Nessun effetto, a corto di tempo non si abbandona | 2 | 0 | −0,007 ± 0,010 | 0 | 0,019 ± 0,004 | 0,44 ± 0,03 | 0,094 ± 0,021 |
+| Effetto moltiplicativo, minore per i forti | 6 | 0,732 | 0,631 ± 0,004 | −0,050 | −0,015 ± 0,006 | 10,27 | 0,607 |
+| Effetto moltiplicativo, uguale per tutti | 4 | 0,727 | 0,635 ± 0,006 | 0,017 | 0,035 ± 0,005 | 10,34 | 0,621 |
+| Effetto moltiplicativo, difficoltà nascosta | 2 | 0,684 | 0,519 ± 0,006 | −0,019 | −0,008 ± 0,005 | 10,56 | 0,554 |
+| Effetto additivo (stessi pp per tutti) | 2 | 0,330 | 0,315 ± 0,001 | 0,095 | 0,097 ± 0,000 | 4,29 | 0,365 |
+
+- **Senza effetto** il log RR primario sta tra −0,06 e +0,03, cioè RR tra 0,94 e 1,03: da qui la soglia di 1,10.
+- **Con un effetto vero** la stima è schiacciata verso zero dal 5% al 24%: prudente. La curva a 8 fasce è invece un po' più ripida del vero ai due estremi (in una simulazione da 240.000 partite, sotto 3 s: 3,07 stimato contro 2,73; oltre 160 s: 0,78 contro 0,91): i RR delle fasce estreme vanno letti come ordine di grandezza.
+- **H2b**: errore tra 0,00 e +0,035, sempre nel verso contrario all'ipotesi. Se la pendenza vera è negativa la stima è attenuata (−0,015 contro −0,050): un «non confermata» può essere un falso negativo, e va detto.
+- **Indice di impennata**: senza effetto −0,002 ± 0,015; con l'effetto inserito 0,187 ± 0,010 (vero 0,18).
+- **Errori standard**: dispersione tra semi / errore standard del bootstrap tra 0,85 e 1,02 per H2a, tra 0,79 e 1,29 per H2b (4–6 semi).
+- **Robustezza a finestre** del piano (i due giocatori nella stessa finestra di 10 semimosse; strati: equilibrio × scarto di rating): senza effetto dà +0,09 / +0,12 quando chi pensa di più sbaglia di più. Non toglie le differenze tra i due giocatori: si legge solo nel segno e non entra nei verdetti.
+- **Limiti non risolti**: la difficoltà nascosta sposta la stima nei due versi (−0,06 senza effetto; −24% con effetto); il simulatore non è Lichess; gli strati sono a fasce, e dentro una fascia resta confusione residua.
+
+## P13.7 Che cosa riportare
+
+1. Campione: coppie, partite, mosse per classe; quota di mosse sotto i 10 secondi; coppie con mosse sia sopra sia sotto i 10 secondi.
+2. H2a: RR con IC95, p, verdetto; tasso grezzo sotto e sopra i 10 secondi; equivalente in pp; indice di impennata con IC95.
+3. H2b: pendenza con IC95, p, verdetto; i cinque RR per fascia di livello; tabella osservati/attesi.
+4. Tabella di Holm sui sei test.
+5. Curve a 8 fasce per classe e per livello (grafico: RR in scala logaritmica contro tempo residuo, una linea per fascia di livello, un riquadro per classe).
+6. Accanto, sempre: stima additiva (modello del piano), robustezza a finestre, varianti `--senza-tornei` e `--stabile`, perdita media. Se una di queste ha segno opposto alla stima primaria, va scritto nella stessa frase del risultato.
+7. Deviazioni dalla pre-registrazione: modello moltiplicativo al posto dell'additivo; soglia di rilevanza fissata dopo il piano; Holm calcolato con i p-value della domanda 1 già noti.
