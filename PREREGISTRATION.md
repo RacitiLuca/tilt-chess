@@ -1,8 +1,8 @@
-# Tilt — Research plan and pre-registration (v1.4)
+# Tilt — Research plan and pre-registration (v1.5)
 
 Written on 15 November 2026, before any analysis of outcomes: so far only descriptive counts have been examined (`riassunto_dati.txt`, `statistiche_campione.txt`). To be committed to GitHub before phase 3: the commit date shows that the hypotheses precede the results.
 
-*This is a faithful English translation of the original Italian plan (`PIANO_RICERCA_it.md`, v1), committed together with it. Section 11 records the amendments agreed after v1 was written and before any outcome analysis. Section 12 records the clarifications made at the end of phase 2, after testing the code on simulated data and before running any script on the real data. Section 13 records a second set of clarifications, made before `08_tilt.py` (the script that compares games after a loss and after a win) was ever run on the real data. Section 14 records the clarifications for question 2 (time pressure), made before `11_pressione.py` was ever run on the real data; at that date question 1 was closed and its results were known, which is stated openly. Italian original of sections 12 to 14: `PRECISAZIONI_it.md`.*
+*This is a faithful English translation of the original Italian plan (`PIANO_RICERCA_it.md`, v1), committed together with it. Section 11 records the amendments agreed after v1 was written and before any outcome analysis. Section 12 records the clarifications made at the end of phase 2, after testing the code on simulated data and before running any script on the real data. Section 13 records a second set of clarifications, made before `08_tilt.py` (the script that compares games after a loss and after a win) was ever run on the real data. Section 14 records the clarifications for question 2 (time pressure), made before `11_pressione.py` was ever run on the real data; at that date question 1 was closed and its results were known, which is stated openly. Section 15 records a reporting rule fixed after the exploration run of question 2 and before its confirmation run; the code was not changed. Italian original of sections 12 to 15: `PRECISAZIONI_it.md`.*
 
 ## 1. Hypotheses
 
@@ -357,3 +357,12 @@ The plan did not fix a relevance threshold for question 2. I fix it now, above t
 5. 8-band curves by class and by level (chart: RR on a log scale against remaining time, one line per level band, one panel per class).
 6. Alongside, always: additive estimate (plan's model), window robustness check, `--senza-tornei` and `--stabile` variants, mean loss. If any of these has the opposite sign to the primary estimate, it must be stated in the same sentence as the result.
 7. Deviations from the pre-registration: multiplicative model instead of the additive one; relevance threshold fixed after the plan; Holm computed with the p-values of question 1 already known.
+
+## 15. After the exploration run of question 2: no code change, one reporting rule (P14, v1.5)
+
+Written on Sunday 22 November 2026, after reading `11_pressione_esplorazione.txt` (exploration group) and **before any run on the confirmation group**.
+
+- **Code: no change.** The exploration run shows no execution error: numerical check (expected − observed) 7e-12 in bullet, 6e-12 in blitz, 3e-12 in rapid; plausible sample (blitz is the largest class, 99,175 pairs).
+- **Reporting problem.** In the 8-band curves some cells have very few moves or none at all, mainly the "160 seconds and above" band in bullet, because bullet games without increment and with at least 160 seconds of initial time are rare. There the model is not identified and the table prints meaningless numbers: RR 9399 with 26 moves and 1 blunder (bullet, 1800–1999); RR 0.000 and a non-zero additive effect with 0 moves; intervals far too narrow with 3 blunders. This does not affect the confirmatory tests (two-band model, blitz: numerical check 6e-12) or the blitz curves, where every cell has at least 188 blunders in the exploration run.
+- **Rule (fixed now, before the confirmation run).** In the 8-band curves (RR and additive), a cell is reported and plotted only if its time band contains **at least 30 blunders**, the same threshold as the observed/expected table. The other cells remain in the CSV but are not discussed. An excluded cell does not change any verdict.
+- **Note on Holm (P13.4).** P13.4 described the thresholds for the case where p(H2a) and p(H2b) are larger than p(H1c) = 0.0009. The code applies Holm in its standard form: if a question-2 p-value is smaller than 0.0009, it gets 0.0083 and H1c gets 0.0100. The decisions are the same in every case: H1c stays rejected, and a question-2 p-value smaller than 0.0009 passes any threshold.

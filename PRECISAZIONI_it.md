@@ -236,3 +236,14 @@ Il piano non fissava una soglia di rilevanza per la domanda 2. La fisso ora, sop
 5. Curve a 8 fasce per classe e per livello (grafico: RR in scala logaritmica contro tempo residuo, una linea per fascia di livello, un riquadro per classe).
 6. Accanto, sempre: stima additiva (modello del piano), robustezza a finestre, varianti `--senza-tornei` e `--stabile`, perdita media. Se una di queste ha segno opposto alla stima primaria, va scritto nella stessa frase del risultato.
 7. Deviazioni dalla pre-registrazione: modello moltiplicativo al posto dell'additivo; soglia di rilevanza fissata dopo il piano; Holm calcolato con i p-value della domanda 1 già noti.
+
+---
+
+# P14. Dopo l'esplorazione della domanda 2: nessuna modifica al codice, una regola di presentazione
+
+Scritta domenica 22 novembre 2026, dopo aver letto `11_pressione_esplorazione.txt` (gruppo esplorazione) e **prima di qualsiasi esecuzione sul gruppo conferma**.
+
+- **Codice: nessuna modifica.** L'esplorazione non mostra errori di esecuzione: controllo numerico (attesi − osservati) 7e-12 nel bullet, 6e-12 nel blitz, 3e-12 nel rapid; campione plausibile (blitz la classe più grande, 99.175 coppie).
+- **Problema di presentazione.** Nelle curve a 8 fasce alcune celle hanno pochissime mosse o nessuna: soprattutto la fascia «160 secondi e oltre» del bullet, perché le partite bullet senza incremento con almeno 160 secondi iniziali sono rare. Lì il modello non è identificato e la tabella stampa numeri senza significato: RR 9399 con 26 mosse e 1 errore grave (bullet, 1800–1999); RR 0,000 e un effetto additivo diverso da zero con 0 mosse; intervalli troppo stretti con 3 errori. Non riguarda i test confermativi (modello a due fasce, blitz: controllo numerico 6e-12) né le curve del blitz, dove ogni cella ha almeno 188 errori gravi nell'esplorazione.
+- **Regola (fissata ora, prima della conferma).** Nelle curve a 8 fasce (RR e additivo) una cella si riporta e si disegna solo se nella sua fascia di tempo ha **almeno 30 errori gravi**, la stessa soglia della tabella osservati/attesi. Le altre restano nel CSV ma non si commentano. Una cella esclusa non cambia nessun verdetto.
+- **Precisazione su Holm (P13.4).** P13.4 descriveva le soglie per il caso in cui p(H2a) e p(H2b) sono più grandi di p(H1c) = 0,0009. Il codice applica Holm nella forma standard: se un p della domanda 2 è più piccolo di 0,0009, riceve 0,0083 e H1c riceve 0,0100. Le decisioni coincidono in tutti i casi: H1c resta rifiutata, e un p della domanda 2 più piccolo di 0,0009 supera qualunque soglia.
