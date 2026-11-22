@@ -1,0 +1,271 @@
+DOMANDA 2 - pressione del tempo | gruppo: esplorazione | variante: principale | seme 20170501 | 1000 ricampionamenti dei giocatori
+Mosse di partite con valutazioni, senza incremento; strati: 294; riferimento delle curve: 20-40 s
+
+== Campione: coppie partita-giocatore analizzabili ==
+classe  coppie  giocatori  partite  partite_con_due_lati
+ blitz   99175      14457    88934               10241.0
+bullet   76133       6263    68402                7731.0
+ rapid   76735      12570    68999                7736.0
+
+################ CLASSE BULLET ################
+Mosse 2,269,304 di 6,263 giocatori (caricate in 3 s)
+
+== [bullet] CURVA PER TEMPO RESIDUO - RR = rapporto di rischio di errore grave rispetto a 20-40 s, stessa partita, stesso giocatore, stesso strato (moltiplicativo); additivo_pp = modello del piano ==
+  livello    tempo   mosse  errori_gravi  tasso_grezzo_perc  perdita_media       RR  ic95_da   ic95_a  additivo_pp  add_ic95_da  add_ic95_a
+    tutti     <3 s   26812          2807              10.47           5.62    1.706    1.610    1.806         6.31         5.77        6.93
+    tutti    3-5 s   38321          4151              10.83           5.67    1.592    1.525    1.660         5.63         5.09        6.07
+    tutti   5-10 s  115797         12233              10.56           5.49    1.430    1.385    1.476         4.41         4.04        4.75
+    tutti  10-20 s  265943         24829               9.34           4.95    1.141    1.118    1.163         1.89         1.68        2.10
+    tutti  20-40 s  682337         59534               8.73           4.76    1.000    1.000    1.000         0.00         0.00        0.00
+    tutti  40-80 s 1051898         58738               5.58           3.81    0.792    0.776    0.809        -2.28        -2.48       -2.05
+    tutti 80-160 s   88099          4308               4.89           3.52    0.617    0.572    0.663        -3.71        -4.28       -3.08
+    tutti  >=160 s      97             6               6.19           4.87    0.044    0.010    0.146       -15.09       -31.27        1.73
+    <1400     <3 s    5742           602              10.48           5.55    1.647    1.468    1.835         5.38         4.22        6.47
+    <1400    3-5 s    9066           981              10.82           5.64    1.583    1.458    1.713         4.75         3.69        5.66
+    <1400   5-10 s   26319          2783              10.57           5.54    1.424    1.334    1.516         3.74         3.01        4.46
+    <1400  10-20 s   54319          5277               9.71           5.10    1.155    1.104    1.203         1.56         1.01        2.06
+    <1400  20-40 s  128691         13162              10.23           5.28    1.000    1.000    1.000         0.00         0.00        0.00
+    <1400  40-80 s  197947         14941               7.55           4.58    0.784    0.754    0.814        -2.53        -3.06       -1.92
+    <1400 80-160 s   13355           794               5.95           3.93    0.559    0.493    0.635        -4.15        -5.50       -2.68
+    <1400  >=160 s      24             3              12.50           6.58    0.942    0.908    0.975         8.85         7.10       10.57
+1400-1599     <3 s    7358           791              10.75           5.69    1.836    1.636    2.042         6.50         5.38        7.58
+1400-1599    3-5 s   10915          1199              10.98           5.73    1.679    1.537    1.831         5.72         4.85        6.55
+1400-1599   5-10 s   32204          3392              10.53           5.52    1.498    1.408    1.593         4.45         3.91        5.01
+1400-1599  10-20 s   71970          6810               9.46           4.97    1.178    1.136    1.219         2.03         1.70        2.35
+1400-1599  20-40 s  181015         16570               9.15           4.94    1.000    1.000    1.000         0.00         0.00        0.00
+1400-1599  40-80 s  283675         17310               6.10           4.02    0.802    0.773    0.834        -2.01        -2.35       -1.65
+1400-1599 80-160 s   27118          1497               5.52           3.77    0.648    0.569    0.736        -3.95        -4.86       -3.00
+1400-1599  >=160 s      47             2               4.26           5.23    0.024    0.005    0.118       -25.14       -29.46      -20.62
+1600-1799     <3 s    6103           656              10.75           5.74    1.870    1.684    2.093         6.61         5.63        7.72
+1600-1799    3-5 s    8427           924              10.96           5.80    1.751    1.600    1.898         5.96         5.17        6.78
+1600-1799   5-10 s   26508          2918              11.01           5.69    1.554    1.458    1.659         4.82         4.22        5.38
+1600-1799  10-20 s   61155          5801               9.49           5.10    1.163    1.113    1.213         1.88         1.47        2.26
+1600-1799  20-40 s  159419         13757               8.63           4.73    1.000    1.000    1.000         0.00         0.00        0.00
+1600-1799  40-80 s  247174         12804               5.18           3.67    0.757    0.724    0.792        -2.13        -2.50       -1.79
+1600-1799 80-160 s   25475          1256               4.93           3.56    0.603    0.520    0.703        -2.97        -3.96       -1.99
+1600-1799  >=160 s       0             0               0.00           0.00    0.000    0.000    0.000         2.02         1.68        2.36
+1800-1999     <3 s    3998           427              10.68           5.84    1.857    1.602    2.144         6.51         5.24        7.80
+1800-1999    3-5 s    5517           617              11.18           5.96    1.737    1.544    1.937         5.94         4.88        6.95
+1800-1999   5-10 s   17597          1946              11.06           5.60    1.530    1.411    1.635         4.75         4.01        5.39
+1800-1999  10-20 s   44858          4224               9.42           5.03    1.166    1.104    1.221         1.90         1.45        2.30
+1800-1999  20-40 s  123075         10158               8.25           4.59    1.000    1.000    1.000         0.00         0.00        0.00
+1800-1999  40-80 s  195654          9053               4.63           3.42    0.751    0.714    0.793        -2.08        -2.46       -1.70
+1800-1999 80-160 s   16536           611               3.69           3.03    0.516    0.431    0.625        -2.55        -3.88       -1.05
+1800-1999  >=160 s      26             1               3.85           2.64 9399.149 8938.197 9863.213        -4.71        -5.20       -4.24
+   >=2000     <3 s    3611           331               9.17           5.13    2.019    1.671    2.480         7.93         6.32        9.63
+   >=2000    3-5 s    4396           430               9.78           4.94    1.799    1.549    2.092         7.13         5.89        8.37
+   >=2000   5-10 s   13169          1194               9.07           4.74    1.484    1.326    1.658         4.89         3.89        5.85
+   >=2000  10-20 s   33641          2717               8.08           4.27    1.196    1.107    1.291         2.29         1.68        2.89
+   >=2000  20-40 s   90137          5887               6.53           3.93    1.000    1.000    1.000         0.00         0.00        0.00
+   >=2000  40-80 s  127448          4630               3.63           2.98    0.716    0.657    0.788        -2.10        -2.68       -1.43
+   >=2000 80-160 s    5615           150               2.67           2.54    0.408    0.296    0.553        -3.78        -5.36       -2.23
+   >=2000  >=160 s       0             0               0.00           0.00    0.000    0.000    0.000         2.34         1.83        2.86
+
+== [bullet] MENO DI 10 SECONDI CONTRO 10 O PIU' - errore grave. RR moltiplicativo (primario); pp_tra_esposti = tasso osservato sotto i 10 s meno quello che le stesse mosse avrebbero senza il RR; additivo_pp = modello del piano ==
+  livello   mosse  mosse_sotto_10  coppie_miste  tasso_sotto_10  tasso_10_o_piu    RR  ic95_da  ic95_a  log_RR  err_std            p  pp_tra_esposti  pp_da  pp_a  additivo_pp  add_da  add_a         add_p
+    tutti 2269304          180930         33074           10.61            7.06 1.279    1.247   1.312  0.2460   0.0134 1.221459e-75            2.31   2.08  2.55         3.22    2.94   3.50 1.640950e-114
+    <1400  435463           41127          8848           10.62            8.67 1.275    1.210   1.343  0.2430   0.0267 8.222297e-20            2.29   1.81  2.78         2.77    2.20   3.31  7.091009e-24
+1400-1599  614302           50477          9593           10.66            7.48 1.322    1.258   1.391  0.2792   0.0253 3.149156e-28            2.60   2.10  3.12         3.25    2.77   3.75  7.687797e-37
+1600-1799  534261           41038          7392           10.96            6.82 1.347    1.276   1.426  0.2980   0.0283 7.384684e-26            2.82   2.34  3.35         3.57    3.07   4.08  7.999633e-44
+1800-1999  407261           27112          4618           11.03            6.33 1.315    1.228   1.399  0.2736   0.0344 1.864465e-15            2.64   2.00  3.25         3.46    2.84   4.05  2.029150e-28
+   >=2000  278017           21176          2623            9.23            5.21 1.231    1.131   1.348  0.2078   0.0437 1.985814e-06            1.73   1.06  2.45         3.28    2.56   4.02  1.314971e-19
+
+== [bullet] ALTRE STIME (tutti i livelli salvo dove indicato) ==
+                                                                            cella      n   stima  ic95_da  ic95_a  err_std             p
+perdita media di Win%: log del rapporto sotto 10 s / 10 s o piu' (moltiplicativo) 180930  0.2545   0.2351  0.2749   0.0099 3.034886e-146
+                 perdita media di Win%: differenza additiva (grezze: 5.54 e 4.25) 180930  1.4847   1.3616  1.5985   0.0602 3.497886e-134
+      impennata: [log RR(5-10) - log RR(10-20)] - [log RR(10-20) - log RR(20-40)] 180930  0.0943   0.0630  0.1276   0.0172  4.340212e-08
+                        pendenza di log RR per fascia di livello (moltiplicativo) 180930 -0.0076  -0.0287  0.0138   0.0110  4.898625e-01
+                        pendenza dell'effetto additivo (pp) per fascia di livello 180930  0.1226  -0.0739  0.3157   0.0996  2.185310e-01
+                 pendenza del log rapporto di perdita media per fascia di livello 180930  0.0131  -0.0028  0.0287   0.0078  9.468193e-02
+                                                 log RR (>=2000) - log RR (<1400)  62303 -0.0352  -0.1265  0.0615   0.0505  4.858071e-01
+     ROBUSTEZZA due giocatori, stessa finestra di 10 semimosse: log RR sotto 10 s 461046  0.1398   0.0314  0.2640   0.0592  1.823024e-02
+              ROBUSTEZZA due giocatori, stessa finestra: differenza additiva (pp) 461046  1.5213   0.3315  2.7900   0.6143  1.326796e-02
+ROBUSTEZZA a finestre: non toglie le differenze tra i due giocatori (chi pensa di piu' puo' anche sbagliare di piu'): si legge solo nel segno e non entra nei verdetti.
+
+== [bullet] ERRORI GRAVI OSSERVATI / ATTESI per livello e tempo (atteso = media della classe nello stesso strato e nella stessa fascia di tempo); forti - deboli = (>=2000) - (<1400); vuoto = meno di 30 errori ==
+   tempo  O/A <1400  O/A 1400-1599  O/A 1600-1799  O/A 1800-1999  O/A >=2000  forti - deboli  ic95_da  ic95_a  tasso_perc <1400  tasso_perc >=2000
+    <3 s      1.045          0.988          0.989          0.953       1.037          -0.008   -0.201   0.156            10.484              9.166
+   3-5 s      1.028          0.997          1.010          0.967       0.974          -0.054   -0.205   0.088            10.821              9.782
+  5-10 s      1.070          1.013          1.023          0.970       0.838          -0.232   -0.343  -0.125            10.574              9.067
+ 10-20 s      1.174          1.046          0.991          0.942       0.781          -0.393   -0.509  -0.284             9.715              8.076
+ 20-40 s      1.253          1.054          0.984          0.910       0.720          -0.532   -0.629  -0.439            10.228              6.531
+ 40-80 s      1.401          1.106          0.924          0.808       0.628          -0.773   -0.867  -0.673             7.548              3.633
+80-160 s      1.249          1.137          0.988          0.752       0.551          -0.698   -0.908  -0.509             5.945              2.671
+ >=160 s        NaN            NaN            NaN            NaN         NaN             NaN      NaN     NaN            12.500                NaN
+Controllo numerico (tutti i livelli, due fasce): 32 passi; errori attesi - osservati per fascia, massimo 7.1e-12 (deve essere circa zero)
+(bullet: 43 s)
+
+################ CLASSE BLITZ ################
+Mosse 3,164,260 di 14,457 giocatori (caricate in 3 s)
+
+== [blitz] CURVA PER TEMPO RESIDUO - RR = rapporto di rischio di errore grave rispetto a 20-40 s, stessa partita, stesso giocatore, stesso strato (moltiplicativo); additivo_pp = modello del piano ==
+  livello    tempo   mosse  errori_gravi  tasso_grezzo_perc  perdita_media    RR  ic95_da  ic95_a  additivo_pp  add_ic95_da  add_ic95_a
+    tutti     <3 s   11900          1020               8.57           4.56 1.604    1.496   1.745         3.82         3.26        4.50
+    tutti    3-5 s   14443          1199               8.30           4.32 1.385    1.296   1.481         2.73         2.20        3.26
+    tutti   5-10 s   38316          3166               8.26           4.25 1.266    1.211   1.330         2.09         1.74        2.47
+    tutti  10-20 s   72995          5705               7.82           4.07 1.124    1.087   1.160         1.00         0.74        1.25
+    tutti  20-40 s  137437         10805               7.86           4.18 1.000    1.000   1.000         0.00         0.00        0.00
+    tutti  40-80 s  294152         22656               7.70           4.13 0.884    0.859   0.908        -1.26        -1.48       -1.07
+    tutti 80-160 s  903905         68157               7.54           4.27 0.778    0.752   0.804        -2.44        -2.67       -2.20
+    tutti  >=160 s 1691112         82490               4.88           3.41 0.626    0.602   0.651        -3.78        -4.04       -3.52
+    <1400     <3 s    1740           201              11.55           6.48 1.578    1.360   1.862         4.20         2.62        5.98
+    <1400    3-5 s    2360           243              10.30           5.37 1.339    1.187   1.511         2.53         1.41        3.75
+    <1400   5-10 s    6125           611               9.98           5.41 1.250    1.151   1.368         1.87         1.08        2.75
+    <1400  10-20 s   11643          1086               9.33           4.84 1.100    1.028   1.174         0.78         0.14        1.41
+    <1400  20-40 s   23365          2252               9.64           4.95 1.000    1.000   1.000         0.00         0.00        0.00
+    <1400  40-80 s   51248          4524               8.83           4.60 0.869    0.825   0.918        -1.47        -1.92       -0.97
+    <1400 80-160 s  162891         16014               9.83           5.06 0.830    0.781   0.880        -2.11        -2.63       -1.60
+    <1400  >=160 s  375982         29102               7.74           4.55 0.712    0.663   0.766        -3.70        -4.32       -3.06
+1400-1599     <3 s    2191           188               8.58           4.66 1.424    1.209   1.686         2.53         1.20        3.94
+1400-1599    3-5 s    2806           250               8.91           4.68 1.294    1.121   1.467         2.03         0.82        3.13
+1400-1599   5-10 s    7415           650               8.77           4.51 1.194    1.079   1.323         1.48         0.65        2.32
+1400-1599  10-20 s   14183          1225               8.64           4.56 1.130    1.056   1.218         0.96         0.42        1.61
+1400-1599  20-40 s   27900          2390               8.57           4.50 1.000    1.000   1.000         0.00         0.00        0.00
+1400-1599  40-80 s   63801          5051               7.92           4.21 0.831    0.786   0.880        -1.62        -2.08       -1.19
+1400-1599 80-160 s  216704         17245               7.96           4.38 0.770    0.722   0.816        -2.52        -3.01       -2.09
+1400-1599  >=160 s  440577         22918               5.20           3.54 0.615    0.569   0.660        -3.98        -4.53       -3.48
+1600-1799     <3 s    2471           191               7.73           4.03 1.576    1.333   1.880         3.23         2.04        4.47
+1600-1799    3-5 s    3075           256               8.33           4.24 1.548    1.354   1.768         3.10         2.05        4.18
+1600-1799   5-10 s    8402           670               7.97           3.94 1.311    1.180   1.453         2.07         1.30        2.83
+1600-1799  10-20 s   16225          1233               7.60           3.99 1.153    1.067   1.238         0.99         0.42        1.53
+1600-1799  20-40 s   30402          2256               7.42           3.99 1.000    1.000   1.000         0.00         0.00        0.00
+1600-1799  40-80 s   64432          5043               7.83           4.17 0.929    0.878   0.986        -0.79        -1.20       -0.38
+1600-1799 80-160 s  206292         15675               7.60           4.31 0.777    0.724   0.832        -2.10        -2.61       -1.62
+1600-1799  >=160 s  401723         17245               4.29           3.22 0.616    0.565   0.666        -3.65        -4.20       -3.10
+1800-1999     <3 s    2478           204               8.23           4.32 1.801    1.498   2.182         3.84         2.55        5.22
+1800-1999    3-5 s    2747           234               8.52           4.43 1.632    1.382   1.928         3.34         2.12        4.54
+1800-1999   5-10 s    7876           606               7.69           4.02 1.395    1.252   1.569         2.19         1.52        2.92
+1800-1999  10-20 s   15240          1126               7.39           3.76 1.192    1.102   1.294         1.19         0.66        1.74
+1800-1999  20-40 s   29078          2069               7.12           3.86 1.000    1.000   1.000         0.00         0.00        0.00
+1800-1999  40-80 s   60997          4576               7.50           4.02 0.905    0.849   0.962        -0.78        -1.22       -0.36
+1800-1999 80-160 s  178031         11893               6.68           3.98 0.718    0.669   0.776        -2.46        -2.90       -1.96
+1800-1999  >=160 s  302762          9928               3.28           2.75 0.533    0.486   0.587        -3.96        -4.50       -3.40
+   >=2000     <3 s    3020           236               7.81           4.01 1.911    1.578   2.363         4.75         3.44        6.34
+   >=2000    3-5 s    3455           216               6.25           3.27 1.329    1.129   1.593         2.51         1.53        3.63
+   >=2000   5-10 s    8498           629               7.40           3.69 1.333    1.191   1.496         2.60         1.85        3.32
+   >=2000  10-20 s   15704          1035               6.59           3.43 1.097    1.009   1.197         0.93         0.42        1.49
+   >=2000  20-40 s   26692          1838               6.89           3.72 1.000    1.000   1.000         0.00         0.00        0.00
+   >=2000  40-80 s   53674          3462               6.45           3.66 0.821    0.765   0.877        -1.48        -1.94       -1.05
+   >=2000 80-160 s  139987          7330               5.24           3.45 0.673    0.616   0.734        -2.95        -3.49       -2.46
+   >=2000  >=160 s  170068          3297               1.94           2.14 0.453    0.399   0.514        -4.61        -5.21       -4.03
+
+== [blitz] MENO DI 10 SECONDI CONTRO 10 O PIU' - errore grave. RR moltiplicativo (primario); pp_tra_esposti = tasso osservato sotto i 10 s meno quello che le stesse mosse avrebbero senza il RR; additivo_pp = modello del piano ==
+  livello   mosse  mosse_sotto_10  coppie_miste  tasso_sotto_10  tasso_10_o_piu    RR  ic95_da  ic95_a  log_RR  err_std            p  pp_tra_esposti  pp_da  pp_a  additivo_pp  add_da  add_a        add_p
+    tutti 3164260           64659         12537            8.33            6.12 1.306    1.259   1.362  0.2672   0.0206 1.949814e-38            1.95   1.67  2.27         2.74    2.45   3.05 1.312180e-68
+    <1400  635354           10225          2851           10.32            8.47 1.360    1.267   1.474  0.3074   0.0382 8.246520e-16            2.73   2.08  3.48         3.00    2.33   3.74 2.260404e-16
+1400-1599  775577           12412          2777            8.77            6.40 1.257    1.158   1.361  0.2287   0.0426 8.110880e-08            1.79   1.12  2.45         2.34    1.64   2.97 4.571244e-12
+1600-1799  733022           13948          2743            8.01            5.76 1.321    1.214   1.433  0.2785   0.0432 1.118861e-10            1.95   1.34  2.55         2.54    1.92   3.17 2.267320e-16
+1800-1999  599209           13101          2334            7.97            5.05 1.363    1.241   1.512  0.3100   0.0506 9.261803e-10            2.12   1.50  2.80         2.59    2.00   3.21 4.882275e-16
+   >=2000  421098           14973          1832            7.22            4.18 1.285    1.154   1.445  0.2509   0.0569 1.055375e-05            1.60   0.91  2.37         2.71    2.09   3.47 2.665707e-14
+
+== [blitz] ALTRE STIME (tutti i livelli salvo dove indicato) ==
+                                                                            cella      n   stima  ic95_da  ic95_a  err_std            p
+perdita media di Win%: log del rapporto sotto 10 s / 10 s o piu' (moltiplicativo)  64659  0.3118   0.2818  0.3434   0.0160 3.613657e-84
+                 perdita media di Win%: differenza additiva (grezze: 4.32 e 3.77)  64659  1.3400   1.2119  1.4790   0.0700 1.378082e-81
+      impennata: [log RR(5-10) - log RR(10-20)] - [log RR(10-20) - log RR(20-40)]  64659  0.0022  -0.0603  0.0719   0.0337 9.484351e-01
+                        pendenza di log RR per fascia di livello (moltiplicativo)  64659 -0.0032  -0.0328  0.0273   0.0151 8.336957e-01
+                        pendenza dell'effetto additivo (pp) per fascia di livello  64659 -0.0345  -0.2529  0.1765   0.1106 7.554058e-01
+                 pendenza del log rapporto di perdita media per fascia di livello  64659 -0.0042  -0.0252  0.0185   0.0113 7.084398e-01
+                                                 log RR (>=2000) - log RR (<1400)  25198 -0.0565  -0.1883  0.0765   0.0674 4.020335e-01
+     ROBUSTEZZA due giocatori, stessa finestra di 10 semimosse: log RR sotto 10 s 655437  0.1914  -0.1049  0.4975   0.1496 2.008712e-01
+              ROBUSTEZZA due giocatori, stessa finestra: differenza additiva (pp) 655437  1.2943  -1.0769  3.8822   1.2226 2.897514e-01
+ROBUSTEZZA a finestre: non toglie le differenze tra i due giocatori (chi pensa di piu' puo' anche sbagliare di piu'): si legge solo nel segno e non entra nei verdetti.
+
+== [blitz] ERRORI GRAVI OSSERVATI / ATTESI per livello e tempo (atteso = media della classe nello stesso strato e nella stessa fascia di tempo); forti - deboli = (>=2000) - (<1400); vuoto = meno di 30 errori ==
+   tempo  O/A <1400  O/A 1400-1599  O/A 1600-1799  O/A 1800-1999  O/A >=2000  forti - deboli  ic95_da  ic95_a  tasso_perc <1400  tasso_perc >=2000
+    <3 s      1.139          0.933          0.926          1.003       1.016          -0.123   -0.336   0.086            11.552              7.815
+   3-5 s      1.176          1.000          1.000          1.015       0.844          -0.332   -0.512  -0.147            10.297              6.252
+  5-10 s      1.199          1.020          0.958          0.941       0.930          -0.269   -0.384  -0.144             9.976              7.402
+ 10-20 s      1.256          1.085          0.984          0.941       0.820          -0.436   -0.551  -0.331             9.327              6.591
+ 20-40 s      1.351          1.094          0.979          0.898       0.784          -0.567   -0.642  -0.487             9.638              6.886
+ 40-80 s      1.410          1.072          1.029          0.922       0.711          -0.698   -0.763  -0.638             8.828              6.450
+80-160 s      1.494          1.079          1.001          0.835       0.634          -0.860   -0.910  -0.812             9.831              5.236
+ >=160 s      1.488          1.031          0.880          0.700       0.477          -1.011   -1.052  -0.967             7.740              1.939
+Controllo numerico (tutti i livelli, due fasce): 33 passi; errori attesi - osservati per fascia, massimo 5.5e-12 (deve essere circa zero)
+(blitz: 58 s)
+
+################ CLASSE RAPID ################
+Mosse 2,469,103 di 12,570 giocatori (caricate in 3 s)
+
+== [rapid] CURVA PER TEMPO RESIDUO - RR = rapporto di rischio di errore grave rispetto a 20-40 s, stessa partita, stesso giocatore, stesso strato (moltiplicativo); additivo_pp = modello del piano ==
+  livello    tempo   mosse  errori_gravi  tasso_grezzo_perc  perdita_media    RR  ic95_da  ic95_a  additivo_pp  add_ic95_da  add_ic95_a
+    tutti     <3 s    2259           186               8.23           4.22 1.674    1.413   1.960         3.25         1.90        4.47
+    tutti    3-5 s    2818           206               7.31           3.89 1.360    1.167   1.580         1.65         0.59        2.74
+    tutti   5-10 s    7605           544               7.15           3.70 1.213    1.089   1.355         1.19         0.46        1.93
+    tutti  10-20 s   13986           913               6.53           3.50 1.074    0.988   1.166         0.37        -0.15        0.92
+    tutti  20-40 s   28111          1859               6.61           3.49 1.000    1.000   1.000         0.00         0.00        0.00
+    tutti  40-80 s   53587          3721               6.94           3.67 0.967    0.909   1.031        -0.28        -0.69        0.12
+    tutti 80-160 s  115478          7808               6.76           3.65 0.870    0.816   0.920        -1.07        -1.47       -0.70
+    tutti  >=160 s 2245259        140061               6.24           3.81 0.780    0.731   0.826        -2.01        -2.41       -1.65
+1400-1599     <3 s     554            48               8.66           4.46 1.513    1.091   2.080         3.02         0.39        5.67
+1400-1599    3-5 s     599            63              10.52           5.64 1.698    1.341   2.221         4.20         1.84        6.75
+1400-1599   5-10 s    1729           126               7.29           3.79 1.096    0.890   1.352         0.55        -0.98        2.08
+1400-1599  10-20 s    3076           211               6.86           3.70 1.080    0.900   1.291         0.43        -0.81        1.64
+1400-1599  20-40 s    5988           429               7.16           3.66 1.000    1.000   1.000         0.00         0.00        0.00
+1400-1599  40-80 s   11770           856               7.27           3.85 0.955    0.844   1.064        -0.36        -1.19        0.38
+1400-1599 80-160 s   26773          1870               6.98           3.73 0.848    0.753   0.950        -1.20        -2.02       -0.42
+1400-1599  >=160 s  619051         40929               6.61           3.94 0.778    0.693   0.869        -1.97        -2.75       -1.25
+1600-1799     <3 s     579            51               8.81           4.48 1.977    1.461   2.638         3.80         1.08        6.49
+1600-1799    3-5 s     703            37               5.26           2.58 1.142    0.832   1.594         0.03        -1.70        1.78
+1600-1799   5-10 s    1899           125               6.58           3.40 1.116    0.880   1.405         0.53        -0.98        1.97
+1600-1799  10-20 s    3500           228               6.51           3.42 1.103    0.938   1.306         0.52        -0.47        1.51
+1600-1799  20-40 s    7252           435               6.00           3.19 1.000    1.000   1.000         0.00         0.00        0.00
+1600-1799  40-80 s   13574           945               6.96           3.62 1.079    0.958   1.210         0.43        -0.25        1.10
+1600-1799 80-160 s   28846          1976               6.85           3.67 0.975    0.857   1.093        -0.23        -0.95        0.45
+1600-1799  >=160 s  555615         31334               5.64           3.63 0.838    0.734   0.935        -1.27        -1.98       -0.62
+
+== [rapid] MENO DI 10 SECONDI CONTRO 10 O PIU' - errore grave. RR moltiplicativo (primario); pp_tra_esposti = tasso osservato sotto i 10 s meno quello che le stesse mosse avrebbero senza il RR; additivo_pp = modello del piano ==
+  livello   mosse  mosse_sotto_10  coppie_miste  tasso_sotto_10  tasso_10_o_piu    RR  ic95_da  ic95_a  log_RR  err_std            p  pp_tra_esposti  pp_da  pp_a  additivo_pp  add_da  add_a        add_p
+    tutti 2469103           12682          3059            7.38            6.28 1.411    1.293   1.541  0.3441   0.0435 2.446512e-15            2.15   1.58  2.72         2.42    1.83   3.02 4.222992e-15
+    <1400  514907            1645             0             NaN             NaN   NaN      NaN     NaN     NaN      NaN          NaN             NaN    NaN   NaN          NaN     NaN    NaN          NaN
+1400-1599  669540            2882           773            8.22            6.64 1.423    1.207   1.667  0.3526   0.0811 1.386144e-05            2.44   1.31  3.63         2.67    1.49   3.83 1.159187e-05
+1600-1799  611968            3181           745            6.70            5.74 1.233    1.032   1.483  0.2093   0.0935 2.517294e-02            1.26   0.18  2.51         1.20   -0.02   2.38 4.717258e-02
+1800-1999  447952            2925             0             NaN             NaN   NaN      NaN     NaN     NaN      NaN          NaN             NaN    NaN   NaN          NaN     NaN    NaN          NaN
+   >=2000  224736            2049             0             NaN             NaN   NaN      NaN     NaN     NaN      NaN          NaN             NaN    NaN   NaN          NaN     NaN    NaN          NaN
+
+== [rapid] ALTRE STIME (tutti i livelli salvo dove indicato) ==
+                                                                            cella     n  stima  ic95_da  ic95_a  err_std            p
+perdita media di Win%: log del rapporto sotto 10 s / 10 s o piu' (moltiplicativo) 12682 0.3659   0.3012  0.4306   0.0334 7.115774e-28
+                 perdita media di Win%: differenza additiva (grezze: 3.83 e 3.80) 12682 1.2372   0.9714  1.4802   0.1332 1.521899e-20
+      impennata: [log RR(5-10) - log RR(10-20)] - [log RR(10-20) - log RR(20-40)] 12682 0.0503  -0.1024  0.2035   0.0803 5.311358e-01
+ROBUSTEZZA a finestre: non toglie le differenze tra i due giocatori (chi pensa di piu' puo' anche sbagliare di piu'): si legge solo nel segno e non entra nei verdetti.
+
+== [rapid] ERRORI GRAVI OSSERVATI / ATTESI per livello e tempo (atteso = media della classe nello stesso strato e nella stessa fascia di tempo); forti - deboli = (>=2000) - (<1400); vuoto = meno di 30 errori ==
+   tempo  O/A <1400  O/A 1400-1599  O/A 1600-1799  O/A 1800-1999  O/A >=2000  forti - deboli  ic95_da  ic95_a  tasso_perc <1400  tasso_perc >=2000
+    <3 s        NaN          0.971          1.131          0.828         NaN             NaN      NaN     NaN            11.638              6.443
+   3-5 s      1.159          1.332          0.798          0.738       1.112          -0.048   -0.560   0.515             8.730              7.416
+  5-10 s      1.397          1.001          0.904          0.932       0.913          -0.484   -0.814  -0.138             9.758              6.003
+ 10-20 s      1.324          1.054          1.009          0.910       0.776          -0.547   -0.805  -0.308             8.312              4.958
+ 20-40 s      1.479          1.150          0.934          0.847       0.776          -0.702   -0.927  -0.496             8.951              5.493
+ 40-80 s      1.396          1.133          1.020          0.822       0.751          -0.645   -0.805  -0.490             8.647              5.871
+80-160 s      1.440          1.124          1.002          0.856       0.664          -0.776   -0.915  -0.662             8.099              5.221
+ >=160 s      1.493          1.077          0.897          0.734       0.489          -1.004   -1.045  -0.961             8.874              3.270
+Controllo numerico (tutti i livelli, due fasce): 32 passi; errori attesi - osservati per fascia, massimo 2.5e-12 (deve essere circa zero)
+(rapid: 33 s)
+
+################ TEST CONFERMATIVI (blitz) ################
+
+== Statistiche dei due test (previsione: H2a > 0, H2b < 0; p a due code, normale, errore standard dal bootstrap; p = 0 vuol dire sotto 1e-300) ==
+                                                            cella     n   stima  ic95_da  ic95_a  err_std        p
+H2a: log RR sotto 10 s contro 10 s o piu', blitz, tutti i livelli 64659  0.2672   0.2307  0.3087   0.0206 1.95e-38
+             H2b: pendenza di log RR per fascia di livello, blitz 64659 -0.0032  -0.0328  0.0273   0.0151 8.34e-01
+H2a come rapporto di rischio: RR = 1.306 (IC95 1.259; 1.362)
+
+== Holm al 5% sui SEI test confermativi (p della domanda 1 da 08_tilt_conferma.txt). Vale come verdetto solo per il gruppo conferma ==
+test        p  soglia_holm uguaglianza_rifiutata
+ H2a 1.95e-38       0.0083                   si'
+ H1c 9.00e-04       0.0100                   si'
+ H1a 4.20e-01       0.0125                    no
+ H1d 4.90e-01       0.0167                    no
+ H2b 8.34e-01       0.0250                    no
+ H1b 9.40e-01       0.0500                    no
+
+== VERDETTI secondo le regole di P13 - SOLO INDICATIVI: questo e' il gruppo esplorazione, serve a provare il codice ==
+H2a: CONFERMATA. RR = 1.306 (IC95 1.259; 1.362); Holm: uguaglianza rifiutata; soglia di rilevanza: IC95 tutto sopra 1.1.
+     Impennata sotto i 10 secondi (descrittiva): 0.002 (IC95 -0.060; 0.072) -> NON scrivere 'impennata': il salto sotto i 10 secondi non e' piu' grande del precedente.
+H2b: seconda parte NON CONFERMATA. Pendenza = -0.0032 per fascia di livello (IC95 -0.0328; 0.0273); Holm: uguaglianza non rifiutata; smentita solo con IC95 tutto sopra +0.04.
+     Prima parte (descrittiva): i forti (>=2000) hanno un rapporto osservati/attesi piu' basso dei deboli (<1400) in 7 fasce di tempo su 8 con dati (IC95 tutto sotto zero): 'a ogni livello di tempo' NON regge per intero.
+Regole di lettura complete: PRECISAZIONI.md, P13. Nessuna stima e' causale.
+
+Stime salvate in output\11_stime_esplorazione.csv - tempo totale 2.3 minuti
