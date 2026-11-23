@@ -1,0 +1,254 @@
+ANALISI POST HOC, ESPLORATIVE: non pre-registrate, scritte dopo aver visto la conferma
+Gruppo: conferma | opzioni della variante principale di 08 | seme 20170501 | 200 rimescolamenti, 1000 ricampionamenti
+Nessuna di queste analisi puo' cambiare i verdetti confermativi. p_fdr: correzione di Benjamini-Hochberg su tutte le celle.
+
+11,829,759 partite in 2,168,488 blocchi di 63,695 giocatori
+
+== CONTROLLO D'IDENTITA' E PH1 - stimatore B per insieme di esiti (200 rimescolamenti, 1000 ricampionamenti) ==
+                                 esiti         cella  coppie  blocchi  tau_dentro_blocco_pp  distorsione_b_pp  tau_B_pp  ic95_da  ic95_a  err_std  p_permutazione
+             tutti gli esiti (come 08)         tutte 3109451   662938                 13.19             13.25     -0.07    -0.24    0.09     0.08          0.4229
+             tutti gli esiti (come 08) classe bullet  768997   147230                  9.03              8.76      0.30    -0.02    0.58     0.15          0.0299
+             tutti gli esiti (come 08)  classe blitz 1663335   364962                 13.80             13.94     -0.16    -0.39    0.07     0.12          0.1493
+             tutti gli esiti (come 08)  classe rapid  677119   150746                 18.73             19.17     -0.55    -0.93   -0.16     0.20          0.0050
+PH1: almeno 4 partite prima (pos >= 4)         tutte 1428816   291787                 10.50             10.52     -0.03    -0.25    0.19     0.11          0.7861
+PH1: almeno 4 partite prima (pos >= 4) classe bullet  489723    88282                  7.95              7.53      0.45     0.11    0.82     0.18          0.0149
+PH1: almeno 4 partite prima (pos >= 4)  classe blitz  740609   157624                 11.33             11.57     -0.27    -0.59    0.05     0.16          0.1045
+PH1: almeno 4 partite prima (pos >= 4)  classe rapid  198484    45881                 15.60             16.16     -0.67    -1.37    0.01     0.35          0.0498
+ PH1: da 1 a 3 partite prima (pos 1-3)         tutte 1680635   375677                 36.03             36.08     -0.08    -0.45    0.29     0.19          0.6965
+ PH1: da 1 a 3 partite prima (pos 1-3) classe bullet  279274    64369                 35.05             35.14     -0.13    -1.07    0.76     0.47          0.7313
+ PH1: da 1 a 3 partite prima (pos 1-3)  classe blitz  922726   210948                 35.97             35.95      0.03    -0.45    0.52     0.26          0.9104
+ PH1: da 1 a 3 partite prima (pos 1-3)  classe rapid  478635   100360                 36.80             36.97     -0.27    -1.02    0.48     0.38          0.4677
+Lettura PH1 (fissata prima): tau_B con pos >= 4, cella 'tutte': sopra -0,35 -> lo scarto tra B e congiunta viene dal TERMINE DI PARAGONE (dipendenza diffusa sulle partite vicine); sotto -0,50 -> viene dal CAMPIONE (la persistenza sta nei blocchi lunghi); in mezzo -> entrambe. Previsione scritta prima: circa -0,5.
+(B con restrizioni: 618 s)
+
+== CONTROLLO D'IDENTITA' con 08_tilt.py (variante principale) ==
+  B           tutte       qui: -0.0714 (-0.2353; 0.0922)   08: -0.0714 (-0.2353; 0.0922)   scarto massimo 0.0e+00
+  B_distanza  partita +1  qui: -0.6765 (-0.9046; -0.4476)   08: -0.6765 (-0.9046; -0.4476)   scarto massimo 0.0e+00
+  B_distanza  partita +2  qui: -0.6883 (-0.9147; -0.4509)   08: -0.6883 (-0.9147; -0.4509)   scarto massimo 0.0e+00
+  B_distanza  partita +3  qui: -0.3370 (-0.5828; -0.1205)   08: -0.3370 (-0.5828; -0.1205)   scarto massimo 0.0e+00
+IDENTITA' VERIFICATA: gli stessi numeri di 08.
+
+################ PH4 - FOTOFINISH STRATIFICATO PER ATTESO, CON PLACEBO ################
+
+== PH4 - partita successiva al fotofinish: perdente - vincitore (pp), ciascuno rispetto alla propria base. Strati: atteso nella partita del fotofinish (fasce di 0,05, code unite) x classe; pesi nL*nW/(nL+nW) ==
+                      cella                      stima  perdenti  vincitori  stima_pp  ic95_da  ic95_a  err_std      p
+ vincitore entro 3 s, tutte non stratificato (come 08)     98647     101115     -0.54    -0.95   -0.13     0.21 0.0103
+ vincitore entro 3 s, tutte    STRATIFICATO per atteso     98647     101115     -1.05    -1.45   -0.62     0.21 0.0000
+vincitore entro 3 s, bullet non stratificato (come 08)     74029      76053     -0.31    -0.77    0.16     0.24 0.2009
+vincitore entro 3 s, bullet    STRATIFICATO per atteso     74029      76053     -0.91    -1.38   -0.41     0.24 0.0002
+ vincitore entro 3 s, blitz non stratificato (come 08)     23641      24139     -1.38    -2.26   -0.48     0.45 0.0021
+ vincitore entro 3 s, blitz    STRATIFICATO per atteso     23641      24139     -1.62    -2.48   -0.72     0.45 0.0003
+ vincitore entro 5 s, tutte non stratificato (come 08)    151881     155638     -0.63    -0.96   -0.27     0.17 0.0003
+ vincitore entro 5 s, tutte    STRATIFICATO per atteso    151881     155638     -1.29    -1.63   -0.92     0.18 0.0000
+vincitore entro 5 s, bullet non stratificato (come 08)    114299     117461     -0.50    -0.89   -0.12     0.19 0.0098
+vincitore entro 5 s, bullet    STRATIFICATO per atteso    114299     117461     -1.30    -1.68   -0.90     0.20 0.0000
+ vincitore entro 5 s, blitz non stratificato (come 08)     36129      36808     -1.13    -1.86   -0.42     0.36 0.0018
+ vincitore entro 5 s, blitz    STRATIFICATO per atteso     36129      36808     -1.39    -2.11   -0.71     0.36 0.0001
+
+== PH4 - PLACEBO: stessa stima sulla partita che PRECEDE il fotofinish nello stesso blocco (stessi strati e pesi) ==
+                      cella                                            stima  coppie  stima_pp  ic95_da  ic95_a  err_std      p
+ vincitore entro 3 s, tutte dopo il fotofinish, solo chi ha la partita prima  166186     -1.09    -1.53   -0.64     0.23 0.0000
+ vincitore entro 3 s, tutte         PLACEBO: la partita PRIMA del fotofinish  166186     -2.70    -3.14   -2.21     0.24 0.0000
+ vincitore entro 3 s, tutte                          differenza dopo - prima  166186      1.61     1.01    2.18     0.31 0.0000
+vincitore entro 3 s, bullet dopo il fotofinish, solo chi ha la partita prima  128544     -1.00    -1.51   -0.49     0.26 0.0001
+vincitore entro 3 s, bullet         PLACEBO: la partita PRIMA del fotofinish  128544     -3.24    -3.75   -2.70     0.27 0.0000
+vincitore entro 3 s, bullet                          differenza dopo - prima  128544      2.24     1.54    2.89     0.35 0.0000
+ vincitore entro 3 s, blitz dopo il fotofinish, solo chi ha la partita prima   36422     -1.56    -2.58   -0.59     0.51 0.0020
+ vincitore entro 3 s, blitz         PLACEBO: la partita PRIMA del fotofinish   36422     -1.09    -2.03   -0.09     0.49 0.0277
+ vincitore entro 3 s, blitz                          differenza dopo - prima   36422     -0.47    -1.85    0.88     0.68 0.4859
+ vincitore entro 5 s, tutte dopo il fotofinish, solo chi ha la partita prima  256091     -1.32    -1.68   -0.95     0.19 0.0000
+ vincitore entro 5 s, tutte         PLACEBO: la partita PRIMA del fotofinish  256091     -2.74    -3.13   -2.36     0.19 0.0000
+ vincitore entro 5 s, tutte                          differenza dopo - prima  256091      1.42     0.94    1.89     0.25 0.0000
+vincitore entro 5 s, bullet dopo il fotofinish, solo chi ha la partita prima  198646     -1.32    -1.71   -0.92     0.21 0.0000
+vincitore entro 5 s, bullet         PLACEBO: la partita PRIMA del fotofinish  198646     -3.23    -3.66   -2.79     0.22 0.0000
+vincitore entro 5 s, bullet                          differenza dopo - prima  198646      1.91     1.37    2.44     0.28 0.0000
+ vincitore entro 5 s, blitz dopo il fotofinish, solo chi ha la partita prima   55625     -1.47    -2.31   -0.66     0.41 0.0004
+ vincitore entro 5 s, blitz         PLACEBO: la partita PRIMA del fotofinish   55625     -1.27    -2.07   -0.46     0.41 0.0018
+ vincitore entro 5 s, blitz                          differenza dopo - prima   55625     -0.19    -1.30    0.88     0.57 0.7352
+
+== PH4 - controllo semplice: solo fotofinish con atteso tra 0,45 e 0,55, senza strati ==
+                                    cella     n  stima_pp  ic95_da  ic95_a  err_std      p
+ entro 3 s, atteso tra 0,45 e 0,55, tutte 74513     -0.69    -1.35   -0.06     0.33 0.0385
+entro 3 s, atteso tra 0,45 e 0,55, bullet 52720     -0.42    -1.22    0.37     0.40 0.2915
+ entro 3 s, atteso tra 0,45 e 0,55, blitz 20900     -1.53    -2.96   -0.23     0.68 0.0249
+
+== PH4 - bilanciamento prima del fotofinish (entro 3 s): perdenti - vincitori, senza strati e con i pesi di strato; 'std' = differenza divisa per la deviazione standard ==
+ cella                          variabile  diff_grezza  diff_con_strati  std_grezza  std_con_strati
+ tutte   vantaggio di rating in G (punti)      -30.435           -4.200      -0.266          -0.037
+ tutte                   atteso in G (pp)       -3.188           -0.051      -0.252          -0.004
+ tutte      rating di riferimento (punti)      -15.897           -1.701      -0.058          -0.006
+ tutte posizione nella sessione (partite)        0.596            0.711       0.026           0.031
+ tutte            base del giocatore (pp)        0.041            0.156       0.012           0.047
+ tutte          punteggio prima di G (pp)       -2.407           -1.480      -0.049          -0.030
+bullet   vantaggio di rating in G (punti)      -35.435           -4.962      -0.301          -0.042
+bullet                   atteso in G (pp)       -3.721           -0.049      -0.284          -0.004
+bullet      rating di riferimento (punti)      -16.556            0.092      -0.062           0.000
+bullet posizione nella sessione (partite)        0.687            0.817       0.027           0.032
+bullet            base del giocatore (pp)        0.014            0.139       0.004           0.042
+bullet          punteggio prima di G (pp)       -3.236           -2.136      -0.066          -0.043
+ blitz   vantaggio di rating in G (punti)      -16.076           -2.081      -0.156          -0.020
+ blitz                   atteso in G (pp)       -1.656           -0.056      -0.149          -0.005
+ blitz      rating di riferimento (punti)      -14.825           -7.532      -0.051          -0.026
+ blitz posizione nella sessione (partite)        0.394            0.402       0.037           0.038
+ blitz            base del giocatore (pp)        0.130            0.219       0.038           0.064
+ blitz          punteggio prima di G (pp)       -0.115            0.291      -0.002           0.006
+
+== PH4 - selezione: quota di perdenti e vincitori di un fotofinish (entro 3 s) con una partita successiva utilizzabile (stesso blocco, avversario diverso). Il confronto e' solo tra chi continua ==
+classe  perdenti  perc_perdenti_con_successiva  vincitori  perc_vincitori_con_successiva
+ tutte    241062                          40.9     241257                           41.9
+ blitz     48739                          48.5      48501                           49.8
+bullet    190129                          38.9     190581                           39.9
+ rapid      2194                          44.5       2175                           42.4
+Lettura PH4 (fissata prima): cella da guardare = blitz, entro 3 s. Placebo con IC95 che contiene lo zero E sotto 0,3 pp in valore assoluto -> 'confronto meno confuso', e alla stima stratificata si applica la regola di 1 pp. Altrimenti si riporta solo la differenza (dopo - prima), come descrittiva. In nessun caso 'causale': lo strato per atteso bilancia il rating, non la forma del momento.
+Avvertenza dal collaudo su dati simulati (tutte, entro 3 s, stratificato). SENZA alcun tilt, con la sola forma della giornata: dopo -2,8, placebo -2,8, differenza -0,3 (IC95 -2,1; 1,6): chi e' in cattiva forma perde piu' spesso il fotofinish, e gli strati per atteso non lo correggono; il placebo invece lo riconosce. CON un tilt inserito di -3,9 pp: dopo -7,8, placebo -7,0, differenza -0,8: anche il placebo diventa negativo, perche' chi ha perso la partita prima perde piu' spesso il fotofinish. Quindi (dopo - prima) NON e' una stima del tilt: dice solo se dopo il fotofinish va peggio di quanto andasse gia' prima.
+
+################ PH3 - STIMA CONGIUNTA CON SEI DISTANZE ################
+
+== PH3 - effetto del risultato inatteso di 1...6 partite prima, a parita' delle altre. Paragone: partite almeno 7 posti prima (blocchi da 8 in su) ==
+                                           distanza  coppie  stima_pp  ic95_da  ic95_a  err_std      p
+                                         partita +1  693725     -0.67    -0.97   -0.37     0.15 0.0000
+                                         partita +2  666566     -0.84    -1.12   -0.54     0.15 0.0000
+                                         partita +3  663549     -0.42    -0.73   -0.14     0.15 0.0045
+                                         partita +4  664769     -0.29    -0.58    0.01     0.15 0.0626
+                                         partita +5  668414     -0.20    -0.49    0.14     0.16 0.2133
+                                         partita +6  678038     -0.28    -0.57    0.02     0.15 0.0652
+           confronto, tre distanze con pos >= 7: +1  764415     -0.67    -0.94   -0.39     0.14 0.0000
+           confronto, tre distanze con pos >= 7: +2  747586     -0.80    -1.07   -0.53     0.14 0.0000
+           confronto, tre distanze con pos >= 7: +3  745596     -0.43    -0.71   -0.18     0.13 0.0013
+per memoria, tre distanze, tutti gli esiti (08): +1 1168821     -0.68    -0.90   -0.45      NaN    NaN
+per memoria, tre distanze, tutti gli esiti (08): +2 1119170     -0.69    -0.91   -0.45      NaN    NaN
+per memoria, tre distanze, tutti gli esiti (08): +3 1131457     -0.34    -0.58   -0.12      NaN    NaN
+Lettura PH3 (fissata prima): IC95 di +4, +5, +6 che contengono lo zero -> l'ipotesi 'dopo 3 partite l'effetto e' finito' e' accettabile. Ancora negativi -> persistenza lenta, la congiunta a tre distanze e' schiacciata verso zero: in quel caso dire se l'IC95 di +1 a sei distanze resta dentro +-1 pp (sensibilita', non sostituisce il verdetto). Un effetto che non cala resta invisibile anche qui.
+
+################ PH2 - STIMA CONGIUNTA PER CLASSE E PER FASCIA DI RATING ################
+
+== PH2 - stima congiunta per cella (nessun rimescolamento) ==
+           cella distanza  coppie  stima_pp  ic95_da  ic95_a  err_std      p
+   classe bullet       +1  405407     -0.09    -0.47    0.33     0.20 0.6653
+   classe bullet       +2  397772     -0.62    -1.04   -0.22     0.20 0.0025
+   classe bullet       +3  401303     -0.27    -0.63    0.09     0.18 0.1388
+    classe blitz       +1  605904     -0.78    -1.11   -0.47     0.16 0.0000
+    classe blitz       +2  574262     -0.81    -1.15   -0.50     0.17 0.0000
+    classe blitz       +3  580624     -0.32    -0.67   -0.01     0.17 0.0557
+    classe rapid       +1  157510     -1.80    -2.47   -1.18     0.32 0.0000
+    classe rapid       +2  147136     -0.40    -1.04    0.26     0.33 0.2284
+    classe rapid       +3  149530     -0.57    -1.21    0.11     0.34 0.0917
+    rating <1400       +1  209682     -1.29    -1.88   -0.72     0.28 0.0000
+    rating <1400       +2  197650     -0.58    -1.16    0.01     0.29 0.0455
+    rating <1400       +3  200013     -0.52    -1.09    0.02     0.28 0.0663
+rating 1400-1599       +1  292291     -0.89    -1.37   -0.39     0.24 0.0002
+rating 1400-1599       +2  277595     -1.11    -1.57   -0.62     0.24 0.0000
+rating 1400-1599       +3  280464     -0.34    -0.84    0.07     0.24 0.1490
+rating 1600-1799       +1  337664     -0.43    -0.87   -0.01     0.22 0.0583
+rating 1600-1799       +2  323096     -0.43    -0.88    0.01     0.23 0.0679
+rating 1600-1799       +3  326869     -0.20    -0.63    0.20     0.22 0.3548
+rating 1800-1999       +1  221627     -0.23    -0.74    0.25     0.26 0.3720
+rating 1800-1999       +2  214042     -0.47    -0.98    0.03     0.27 0.0806
+rating 1800-1999       +3  216242     -0.14    -0.64    0.41     0.27 0.6071
+   rating >=2000       +1  107557     -0.58    -1.31    0.15     0.38 0.1267
+   rating >=2000       +2  106787     -1.02    -1.72   -0.35     0.36 0.0044
+   rating >=2000       +3  107869     -0.82    -1.53   -0.07     0.38 0.0299
+  bullet - rapid       +1       0      1.71     1.00    2.47     0.38 0.0000
+Lettura PH2 (fissata prima): 'bullet - rapid' a +1 con lo stesso segno di B (positivo) -> l'ordine rapid > blitz > bullet non dipende dallo stimatore. Anche con lo stesso segno, il confronto tra cadenze resta 'per partita' e non alla pari.
+
+################ PH6 (facoltativo) - STIMA CONGIUNTA PER PAUSA PRIMA DELLA PARTITA ################
+
+== PH6 - stima congiunta secondo la pausa tra la partita precedente e l'esito ==
+              cella distanza  coppie  stima_pp  ic95_da  ic95_a  err_std      p
+  pausa fino a 60 s       +1  674626     -0.79    -1.08   -0.48     0.16 0.0000
+  pausa fino a 60 s       +2  643902     -0.77    -1.07   -0.47     0.15 0.0000
+  pausa fino a 60 s       +3  647930     -0.46    -0.78   -0.19     0.15 0.0028
+   pausa oltre 60 s       +1  494195     -0.52    -0.86   -0.17     0.18 0.0032
+   pausa oltre 60 s       +2  475268     -0.58    -0.93   -0.22     0.18 0.0015
+   pausa oltre 60 s       +3  483527     -0.17    -0.52    0.20     0.18 0.3616
+fino a 60 s - oltre       +1       0     -0.28    -0.68    0.19     0.23 0.2176
+Lettura PH6: descrittiva. La pausa la sceglie il giocatore: una differenza non e' un effetto della pausa.
+
+PH5 (asimmetria tra risultato inatteso positivo e negativo): non eseguito in questo script.
+
+== RIEPILOGO di tutte le celle post hoc, con p corretto (FDR di Benjamini-Hochberg sulle celle di questo script) ==
+      analisi                                                                          cella  stima_pp  ic95_da  ic95_a  err_std      p  p_fdr       n
+          PH1                                 PH1: almeno 4 partite prima (pos >= 4) | tutte     -0.03    -0.25    0.19     0.11 0.7861 0.7958 1428816
+          PH1                         PH1: almeno 4 partite prima (pos >= 4) | classe bullet      0.45     0.11    0.82     0.18 0.0149 0.0260  489723
+          PH1                          PH1: almeno 4 partite prima (pos >= 4) | classe blitz     -0.27    -0.59    0.05     0.16 0.1045 0.1382  740609
+          PH1                          PH1: almeno 4 partite prima (pos >= 4) | classe rapid     -0.67    -1.37    0.01     0.35 0.0498 0.0770  198484
+          PH1                                  PH1: da 1 a 3 partite prima (pos 1-3) | tutte     -0.08    -0.45    0.29     0.19 0.6965 0.7322 1680635
+          PH1                          PH1: da 1 a 3 partite prima (pos 1-3) | classe bullet     -0.13    -1.07    0.76     0.47 0.7313 0.7536  279274
+          PH1                           PH1: da 1 a 3 partite prima (pos 1-3) | classe blitz      0.03    -0.45    0.52     0.26 0.9104 0.9104  922726
+          PH1                           PH1: da 1 a 3 partite prima (pos 1-3) | classe rapid     -0.27    -1.02    0.48     0.38 0.4677 0.5182  478635
+          PH4                        vincitore entro 3 s, tutte | non stratificato (come 08)     -0.54    -0.95   -0.13     0.21 0.0103 0.0183  199762
+          PH4                           vincitore entro 3 s, tutte | STRATIFICATO per atteso     -1.05    -1.45   -0.62     0.21 0.0000 0.0000  199762
+  PH4_placebo  vincitore entro 3 s, tutte | dopo il fotofinish, solo chi ha la partita prima     -1.09    -1.53   -0.64     0.23 0.0000 0.0000  166186
+  PH4_placebo          vincitore entro 3 s, tutte | PLACEBO: la partita PRIMA del fotofinish     -2.70    -3.14   -2.21     0.24 0.0000 0.0000  166186
+  PH4_placebo                           vincitore entro 3 s, tutte | differenza dopo - prima      1.61     1.01    2.18     0.31 0.0000 0.0000  166186
+          PH4                       vincitore entro 3 s, bullet | non stratificato (come 08)     -0.31    -0.77    0.16     0.24 0.2009 0.2496  150082
+          PH4                          vincitore entro 3 s, bullet | STRATIFICATO per atteso     -0.91    -1.38   -0.41     0.24 0.0002 0.0005  150082
+  PH4_placebo vincitore entro 3 s, bullet | dopo il fotofinish, solo chi ha la partita prima     -1.00    -1.51   -0.49     0.26 0.0001 0.0004  128544
+  PH4_placebo         vincitore entro 3 s, bullet | PLACEBO: la partita PRIMA del fotofinish     -3.24    -3.75   -2.70     0.27 0.0000 0.0000  128544
+  PH4_placebo                          vincitore entro 3 s, bullet | differenza dopo - prima      2.24     1.54    2.89     0.35 0.0000 0.0000  128544
+          PH4                        vincitore entro 3 s, blitz | non stratificato (come 08)     -1.38    -2.26   -0.48     0.45 0.0021 0.0044   47780
+          PH4                           vincitore entro 3 s, blitz | STRATIFICATO per atteso     -1.62    -2.48   -0.72     0.45 0.0003 0.0008   47780
+  PH4_placebo  vincitore entro 3 s, blitz | dopo il fotofinish, solo chi ha la partita prima     -1.56    -2.58   -0.59     0.51 0.0020 0.0043   36422
+  PH4_placebo          vincitore entro 3 s, blitz | PLACEBO: la partita PRIMA del fotofinish     -1.09    -2.03   -0.09     0.49 0.0277 0.0464   36422
+  PH4_placebo                           vincitore entro 3 s, blitz | differenza dopo - prima     -0.47    -1.85    0.88     0.68 0.4859 0.5313   36422
+          PH4                        vincitore entro 5 s, tutte | non stratificato (come 08)     -0.63    -0.96   -0.27     0.17 0.0003 0.0008  307519
+          PH4                           vincitore entro 5 s, tutte | STRATIFICATO per atteso     -1.29    -1.63   -0.92     0.18 0.0000 0.0000  307519
+  PH4_placebo  vincitore entro 5 s, tutte | dopo il fotofinish, solo chi ha la partita prima     -1.32    -1.68   -0.95     0.19 0.0000 0.0000  256091
+  PH4_placebo          vincitore entro 5 s, tutte | PLACEBO: la partita PRIMA del fotofinish     -2.74    -3.13   -2.36     0.19 0.0000 0.0000  256091
+  PH4_placebo                           vincitore entro 5 s, tutte | differenza dopo - prima      1.42     0.94    1.89     0.25 0.0000 0.0000  256091
+          PH4                       vincitore entro 5 s, bullet | non stratificato (come 08)     -0.50    -0.89   -0.12     0.19 0.0098 0.0178  231760
+          PH4                          vincitore entro 5 s, bullet | STRATIFICATO per atteso     -1.30    -1.68   -0.90     0.20 0.0000 0.0000  231760
+  PH4_placebo vincitore entro 5 s, bullet | dopo il fotofinish, solo chi ha la partita prima     -1.32    -1.71   -0.92     0.21 0.0000 0.0000  198646
+  PH4_placebo         vincitore entro 5 s, bullet | PLACEBO: la partita PRIMA del fotofinish     -3.23    -3.66   -2.79     0.22 0.0000 0.0000  198646
+  PH4_placebo                          vincitore entro 5 s, bullet | differenza dopo - prima      1.91     1.37    2.44     0.28 0.0000 0.0000  198646
+          PH4                        vincitore entro 5 s, blitz | non stratificato (come 08)     -1.13    -1.86   -0.42     0.36 0.0018 0.0040   72937
+          PH4                           vincitore entro 5 s, blitz | STRATIFICATO per atteso     -1.39    -2.11   -0.71     0.36 0.0001 0.0004   72937
+  PH4_placebo  vincitore entro 5 s, blitz | dopo il fotofinish, solo chi ha la partita prima     -1.47    -2.31   -0.66     0.41 0.0004 0.0010   55625
+  PH4_placebo          vincitore entro 5 s, blitz | PLACEBO: la partita PRIMA del fotofinish     -1.27    -2.07   -0.46     0.41 0.0018 0.0040   55625
+  PH4_placebo                           vincitore entro 5 s, blitz | differenza dopo - prima     -0.19    -1.30    0.88     0.57 0.7352 0.7536   55625
+PH4_alla_pari                                       entro 3 s, atteso tra 0,45 e 0,55, tutte     -0.69    -1.35   -0.06     0.33 0.0385 0.0619   74513
+PH4_alla_pari                                      entro 3 s, atteso tra 0,45 e 0,55, bullet     -0.42    -1.22    0.37     0.40 0.2915 0.3414   52720
+PH4_alla_pari                                       entro 3 s, atteso tra 0,45 e 0,55, blitz     -1.53    -2.96   -0.23     0.68 0.0249 0.0425   20900
+          PH3                                                      sei distanze | partita +1     -0.67    -0.97   -0.37     0.15 0.0000 0.0000  693725
+          PH3                                                      sei distanze | partita +2     -0.84    -1.12   -0.54     0.15 0.0000 0.0000  666566
+          PH3                                                      sei distanze | partita +3     -0.42    -0.73   -0.14     0.15 0.0045 0.0084  663549
+          PH3                                                      sei distanze | partita +4     -0.29    -0.58    0.01     0.15 0.0626 0.0917  664769
+          PH3                                                      sei distanze | partita +5     -0.20    -0.49    0.14     0.16 0.2133 0.2611  668414
+          PH3                                                      sei distanze | partita +6     -0.28    -0.57    0.02     0.15 0.0652 0.0937  678038
+          PH3                             tre distanze, stessi esiti (pos >= 7) | partita +1     -0.67    -0.94   -0.39     0.14 0.0000 0.0000  764415
+          PH3                             tre distanze, stessi esiti (pos >= 7) | partita +2     -0.80    -1.07   -0.53     0.14 0.0000 0.0000  747586
+          PH3                             tre distanze, stessi esiti (pos >= 7) | partita +3     -0.43    -0.71   -0.18     0.13 0.0013 0.0031  745596
+          PH2                                                     classe bullet | partita +1     -0.09    -0.47    0.33     0.20 0.6653 0.7086  405407
+          PH2                                                     classe bullet | partita +2     -0.62    -1.04   -0.22     0.20 0.0025 0.0050  397772
+          PH2                                                     classe bullet | partita +3     -0.27    -0.63    0.09     0.18 0.1388 0.1778  401303
+          PH2                                                      classe blitz | partita +1     -0.78    -1.11   -0.47     0.16 0.0000 0.0000  605904
+          PH2                                                      classe blitz | partita +2     -0.81    -1.15   -0.50     0.17 0.0000 0.0000  574262
+          PH2                                                      classe blitz | partita +3     -0.32    -0.67   -0.01     0.17 0.0557 0.0846  580624
+          PH2                                                      classe rapid | partita +1     -1.80    -2.47   -1.18     0.32 0.0000 0.0000  157510
+          PH2                                                      classe rapid | partita +2     -0.40    -1.04    0.26     0.33 0.2284 0.2715  147136
+          PH2                                                      classe rapid | partita +3     -0.57    -1.21    0.11     0.34 0.0917 0.1233  149530
+          PH2                                                      rating <1400 | partita +1     -1.29    -1.88   -0.72     0.28 0.0000 0.0000  209682
+          PH2                                                      rating <1400 | partita +2     -0.58    -1.16    0.01     0.29 0.0455 0.0717  197650
+          PH2                                                      rating <1400 | partita +3     -0.52    -1.09    0.02     0.28 0.0663 0.0937  200013
+          PH2                                                  rating 1400-1599 | partita +1     -0.89    -1.37   -0.39     0.24 0.0002 0.0006  292291
+          PH2                                                  rating 1400-1599 | partita +2     -1.11    -1.57   -0.62     0.24 0.0000 0.0000  277595
+          PH2                                                  rating 1400-1599 | partita +3     -0.34    -0.84    0.07     0.24 0.1490 0.1880  280464
+          PH2                                                  rating 1600-1799 | partita +1     -0.43    -0.87   -0.01     0.22 0.0583 0.0870  337664
+          PH2                                                  rating 1600-1799 | partita +2     -0.43    -0.88    0.01     0.23 0.0679 0.0944  323096
+          PH2                                                  rating 1600-1799 | partita +3     -0.20    -0.63    0.20     0.22 0.3548 0.4098  326869
+          PH2                                                  rating 1800-1999 | partita +1     -0.23    -0.74    0.25     0.26 0.3720 0.4179  221627
+          PH2                                                  rating 1800-1999 | partita +2     -0.47    -0.98    0.03     0.27 0.0806 0.1101  214042
+          PH2                                                  rating 1800-1999 | partita +3     -0.14    -0.64    0.41     0.27 0.6071 0.6550  216242
+          PH2                                                     rating >=2000 | partita +1     -0.58    -1.31    0.15     0.38 0.1267 0.1649  107557
+          PH2                                                     rating >=2000 | partita +2     -1.02    -1.72   -0.35     0.36 0.0044 0.0084  106787
+          PH2                                                     rating >=2000 | partita +3     -0.82    -1.53   -0.07     0.38 0.0299 0.0490  107869
+          PH2                                                   congiunta +1: bullet - rapid      1.71     1.00    2.47     0.38 0.0000 0.0000       0
+          PH6                                                 pausa fino a 60 s | partita +1     -0.79    -1.08   -0.48     0.16 0.0000 0.0000  674626
+          PH6                                                 pausa fino a 60 s | partita +2     -0.77    -1.07   -0.47     0.15 0.0000 0.0000  643902
+          PH6                                                 pausa fino a 60 s | partita +3     -0.46    -0.78   -0.19     0.15 0.0028 0.0055  647930
+          PH6                                                  pausa oltre 60 s | partita +1     -0.52    -0.86   -0.17     0.18 0.0032 0.0062  494195
+          PH6                                                  pausa oltre 60 s | partita +2     -0.58    -0.93   -0.22     0.18 0.0015 0.0034  475268
+          PH6                                                  pausa oltre 60 s | partita +3     -0.17    -0.52    0.20     0.18 0.3616 0.4118  483527
+          PH6                                   congiunta +1: pausa fino a 60 s - oltre 60 s     -0.28    -0.68    0.19     0.23 0.2176 0.2623       0
+
+Stime salvate in output\10_posthoc_conferma.csv - tempo totale 15.0 minuti
